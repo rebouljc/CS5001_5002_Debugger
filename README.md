@@ -1,5 +1,5 @@
 # CS5001_5002_Debugger
-Repository for CS5001/5002 Senior Design Debugger Project.  Team Members: James Reboulet, Wayne Hafeley, Deion Booher
+Repository for CS5001/5002 Senior Design Debugger Project.  Team Members: James Reboulet, Wayne Hafely, Deion Booher
 
 **Team Members:**
 * James Reboulet | *Computer Science*  | rebouljc@mail.uc.edu
