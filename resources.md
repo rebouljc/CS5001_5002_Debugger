@@ -9,6 +9,7 @@ a lot more love in the debugger department.
 **Source Code for lldb and gdb**
 * lldb: <https://lldb.llvm.org/resources/contributing.html>
 * gdb: <https://sourceware.org/git/?p=gdb.git>
+	* check windows-nat.c:1819 for process attaching code.
 
 Here are some apis that have been written for lldb and gdb. These might give us some idea of what a debugger's
 architecture might look like.
