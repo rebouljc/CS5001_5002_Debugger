@@ -1,2 +1,0 @@
-C:\Users\linda\OneDrive\Documents\GitHub\CS5001_5002_Debugger\src\Test_WindowsVSProject_DummyProcess\DummyProcess\Debug\DummyProcess.exe
-C:\Users\linda\OneDrive\Documents\GitHub\CS5001_5002_Debugger\src\Test_WindowsVSProject_DummyProcess\DummyProcess\Debug\DummyProcess.pdb
