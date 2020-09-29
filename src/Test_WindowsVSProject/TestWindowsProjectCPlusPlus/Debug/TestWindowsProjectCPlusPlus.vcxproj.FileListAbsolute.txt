@@ -1,0 +1,2 @@
+C:\Users\linda\OneDrive\Documents\GitHub\CS5001_5002_Debugger\src\Test_WindowsVSProject\TestWindowsProjectCPlusPlus\Debug\TestWindowsProjectCPlusPlus.exe
+C:\Users\linda\OneDrive\Documents\GitHub\CS5001_5002_Debugger\src\Test_WindowsVSProject\TestWindowsProjectCPlusPlus\Debug\TestWindowsProjectCPlusPlus.pdb
