@@ -9,10 +9,18 @@ Research GUI frameworks to decide which one we might want to complete the projec
     - [ ] PyQt *Deion*
     - [ ] ImGui *Deion*
     - [ ] GTK *Deion*
-- [ ] Create a basic application using Qt - *Deion*
-- [ ] Create a basic application using PyQt - *Deion*
-- [ ] Create a basic application using ImGui - *Deion*
-- [ ] Create a basic application using GTK - *James*
+
+* Windows
+    - [ ] Create a basic application using Qt - *Deion*
+    - [ ] Create a basic application using PyQt - *Deion*
+    - [ ] Create a basic application using ImGui - *Wayne*
+    - [ ] Create a basic application using GTK - *James*
+
+* Linux
+    - [ ] Create a basic application using Qt - *Deion*
+    - [ ] Create a basic application using PyQt - *Deion*
+    - [ ] Create a basic application using ImGui - *Wayne*
+    - [ ] Create a basic application using GTK - *James*
 
 ### GUI Features
 Here are some things we might want in the final UI (using whatever framework)
@@ -38,8 +46,10 @@ Here are some things we might want in the final UI (using whatever framework)
     - [ ] Stop - *Deion*
 
 ### Starting Debugger and Debugger Functionality
-Get started in creating the debugger. The earlier we start the better we will understand how everything should be designed.
+Get started in creating the debugger. The earlier we start the better we will understand how everything should be designed. - *Wayne*
 
+- [ ] Implement a command line interface to interact with the debugger - *Wayne*
+- [ ] Implement some kind of communication system with a running debugger for remote controlling - *Wayne*
 - [ ] Create a generalized platform layer where all operating system interactions have to go through this layer - *Wayne*
     * This will help make the debugger easy to port to new operating systems
 
