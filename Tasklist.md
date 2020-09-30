@@ -1,7 +1,5 @@
 # Task Lists
-**TODO: assign or claim tasks**
-
-These lists are not complete by any means. Some tasks may become unnecessary, and new tasks will be added at any time.
+These lists are not complete by any means. Some tasks may become unnecessary, and new tasks will be added at any time. The assignees are not in stone, anyone can work on anything.
 
 ### Starting GUI
 Research GUI frameworks to decide which one we might want to complete the project with. Each of these should be completed on both **Windows** and **Linux**.
