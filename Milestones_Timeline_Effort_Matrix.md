@@ -1,11 +1,11 @@
 # Anticipated Milestones
 | Milestone #      | Description | Completion Date |
 | :-------------:| :-----------: | :---------------:|
-| 1 | Research and get comfortable with various GUI API's and write a basic application in each of them.  Decide how the backbone is going to interract with the GUI. | TBD
-| 2 | Create a basic debugger application that does at least what are considered the fundamentals: It contains a text viewer; it has basic buttons for basic debugger functions and interractions; it can attach to a running process, select an .exe to debug; it can load source code into the text viewer; and it can set and manage breakpoints which will also involve the capability of being able to read and write the attached program's CPU registers and memory.  | TBD |
-|3| Test and iron out many of the bugs that are likely to occur as a result of Milestone 2 and then enhance the basic application with the nice-to-have features such as catching and interpreting program exceptions, the implementation of a command-line interface, and implementation of the generalized platform layer to encapsulate all of the operating system interractions. | TBD |
-|4| Continue to iron out bugs from Milestone 3 and maybe 2 again and implement the additional remote-control features and potentially attempt to implement the debugger in other languages to enhance portability. |TBD|
-|5| Test again for additional bugs in milestones 2,3, and 4, assure that many issues are fixed, and if time persists, attempt to add features which were discussed in the initial requirements, but are not on the list. |TBD|
+| 1 | Research and get comfortable with various GUI API's and write a basic application in each of them.  Decide how the backbone is going to interract with the GUI. | Week 0 (Prior to Semester) to End of Week 1 at latest
+| 2 | Create a basic debugger application that does at least what are considered the fundamentals: It contains a text viewer; it has basic buttons for basic debugger functions and interractions; it can attach to a running process, select an .exe to debug; it can load source code into the text viewer; and it can set and manage breakpoints which will also involve the capability of being able to read and write the attached program's CPU registers and memory.  | End of Week 9 |
+|3| Test and iron out many of the bugs that are likely to occur as a result of Milestone 2 and then enhance the basic application with the nice-to-have features such as catching and interpreting program exceptions, the implementation of a command-line interface, and implementation of the generalized platform layer to encapsulate all of the operating system interractions. | End of Week 13 |
+|4| Continue to iron out bugs from Milestone 3 and maybe 2 again and implement the additional remote-control features and potentially attempt to implement the debugger in other languages to enhance portability. |End of Week 14|
+|5| Test again for additional bugs in milestones 2,3, and 4, assure that many issues are fixed, and if time persists, attempt to add features which were discussed in the initial requirements, but are not on the list. |End of Semester (Week 15 1/2)|
 
 # Table 1: Timeline
 | Task# | Description | Associated Milestone # | Start Date | Completion Date | Primary Responsibility
