@@ -9,52 +9,52 @@
 
 # Table 1: Timeline
 | Task# | Description | Associated Milestone # | Start Date | Completion Date | Primary Responsibility
-|:------| :--------: | :---------------------:|:----------:|:---------------:|:----------------------:|
-|1 | Create a basic application using Qt - Windows |1 | Insert Start Date | Insert End Date | Deon        |
-| 2| Create a basic application using PyQt - Windows |1 | | | Deion|
-| 3| Create a basic application using ImGui - Windows | 1| | | Wayne |
-| 4| Create a basic application using GTK - Windows | 1| | | James |
-| 5| Create a basic application using Qt - Linux |1 | | | Deion |
-| 6| Create a basic application using PyQt - Linux |1 | | | Deion |
-| 7| Create a basic application using ImGui - Linux |1 | | | Wayne |
-| 8| Create a basic application using GTK - Linux |1 | | | James |
-| 9| Create a debugger application that can attach itself to another program (Just a basic application, no breakpoints or anything) | 1| | |Wayne |
-| 10| Implement a text viewer | 2| | | James|
-| 11| Develop a set breakpoint system | 2| | | Deion |
-| 12| Develop a breakpoint viewer system |2 | | | James |
-| 13| Develop a visual indication of the program hitting a breakpoint |2 | | | James |
-| 14| Implement a system to select an .exe to debug | 2| | | Deion|
-| 15| Implement a system to select a running process to debug | 2| | | Deion |
-| 16| Develop interactive buttons for debugger interactions |2 | | |  Deion|
-| 17| Continue |2 | | | Deion|
-|18 | Step forward |2 | | | Deion|
-| 19| Stop |2 | | | Deion |
-| 20| Implement: Read memory from an attached program -Windows | 2| | | James |
-| 21| Implement: Write memory from an attached program -Windows | 2| | | James |
-| 22| Implement: Read CPU registers from an attached program -Windows |2 | | | James |
-| 23| Implement: Write CPU registers from an attached program -Windows |2 | | | James |
-| 24| Implement: Set and manage breakpoints. -Windows | 2| | | James |
-| 25| Implement: Start the debugee program from the debugger -Windows | 2| | | James |
-| 26| Implement: Read in C++ source for user interaction -Windows |2 | | | James |
-| 27| Create a debugger application that can attach itself to another program |2 | | | Wayne |
-| 28| Implement: Read CPU registers from an attached program. -Linux |2 | | | Wayne |
-| 29| Implement: Write CPU registers from an attached program. -Linux |2 | | | Wayne |
-| 30| Implement: Set and manage breakpoints. -Linux |2 | | |Wayne |
-| 31| Implement: Start the debugee program from the debugger. -Linux |2 | | | Wayne |
-| 32| Implement: Read in C++ source for user interaction -Linux |2 | | | Wayne |
-| 33| Implement a memory viewer/editor | 3| | |Deion |
-| 34| Allow the user to view/edit the values in different bases | 3| | |  Deion|
-| 35| Develop an option to view assembly alongside source code. |3 | | |  Deion|
-| 36| Develop a syntax highlighting system (RegEx?) |3 | | | Wayne |
-| 37| Implement for x86 Assembly | 3| | | Wayne |
-| 38| Implement for C | 2,3| | | Wayne |
-| 39| Implement for C++ |2,3 | | | James |
-| 40| Implement a command line interface to interact with the debugger |3 | | | Wayne |
-| 41| Create a generalized platform layer where all operating system interactions have to go through this layer.  This will help make the debugger easy to port to new operating systems. |3 | | | Wayne |
-| 42| Implement: Catch and interpret program exceptions. - Windows |3 | | | James |
-| 43| Implement for other languages (add to this list) |4 | | | Wayne |
-| 44| Implement some kind of communication system with a running debugger for remote controlling |4 | | | Wayne |
-| 45| Test all code from Milestones 2, 3, and 4 and add additional features that were mentioned in requirements that would be great to have to enhance competitiveness (i.e. AI features, error interpretation, suggestions for runtime error repair/code changes), but are not necessary for a functioning debugger, may not be able to be completed by the project deadline, and has do be done at own risk without causing regressions in prior functionality. | 5 | | | Wayne, James, Deion |
+|:------| :--------: | :---------------------:|:-----------:|:---------------:|:----------------------:|
+|1 | Create a basic application using Qt - Windows |1 | Week 0 | Week 1 | Deion        |
+| 2| Create a basic application using PyQt - Windows |1 | Week 0 | Week 1 | Deion|
+| 3| Create a basic application using ImGui - Windows | 1|  Week 0 | Week 1 | Wayne |
+| 4| Create a basic application using GTK - Windows | 1| Week 0 | Week 1 | James |
+| 5| Create a basic application using Qt - Linux |1 | Week 0 | Week 1 | Deion |
+| 6| Create a basic application using PyQt - Linux |1 | Week 0 | Week 1 | Deion |
+| 7| Create a basic application using ImGui - Linux |1 | Week 0 | Week 1  | Wayne |
+| 8| Create a basic application using GTK - Linux |1 |Week 0| Week 1 | James |
+| 9| Create a debugger application that can attach itself to another program (Just a basic application, no breakpoints or anything) | 1| Week 0 | Week 2 |Wayne |
+| 10| Implement a text viewer | 2| Week 1| Week 3 | James|
+| 11| Develop a set breakpoint system | 2| Week 1 | Week 4| Deion |
+| 12| Develop a breakpoint viewer system |2 | Week 1| Week 4 | James |
+| 13| Develop a visual indication of the program hitting a breakpoint |2 | Week 2 | Week4 | James |
+| 14| Implement a system to select an .exe to debug | 2| Week 2 | Week 4 | Deion|
+| 15| Implement a system to select a running process to debug | 2| Week 2 | Week 5 | Deion |
+| 16| Develop interactive buttons for debugger interactions |2 | Week 2 | Week 3|  Deion|
+| 17| Continue |2 | Week 3 | Week 5 | Deion|
+|18 | Step forward |2 | Week 3 | Week 5| Deion|
+| 19| Stop |2 | Week 3 | Week 5 | Deion |
+| 20| Implement: Read memory from an attached program -Windows | 2| Week 5| Week 7 | James |
+| 21| Implement: Write memory from an attached program -Windows | 2| Week 5| Week 7 | James |
+| 22| Implement: Read CPU registers from an attached program -Windows |2 | Week 6| Week 8 | James |
+| 23| Implement: Write CPU registers from an attached program -Windows |2 | Week 6| Week 8 | James |
+| 24| Implement: Set and manage breakpoints. -Windows | 2| Week 6| Week 8 | James |
+| 25| Implement: Start the debugee program from the debugger -Windows | 2| Week 7| Week 9 | James |
+| 26| Implement: Read in C++ source for user interaction -Windows |2 | Week 8| Week 9 | James |
+| 27| Create a debugger application that can attach itself to another program |2 | Week 5| Week 7 | Wayne |
+| 28| Implement: Read CPU registers from an attached program. -Linux |2 | Week 6| Week 8 | Wayne |
+| 29| Implement: Write CPU registers from an attached program. -Linux |2 | Week 6| Week 8 | Wayne |
+| 30| Implement: Set and manage breakpoints. -Linux |2 | Week 6| Week 8 |Wayne |
+| 31| Implement: Start the debugee program from the debugger. -Linux |2 | Week 7| Week 9 | Wayne |
+| 32| Implement: Read in C++ source for user interaction -Linux |2 | Week 8| Week 9 | Wayne |
+| 33| Implement a memory viewer/editor | 3| Week 5| Week 8 |Deion |
+| 34| Allow the user to view/edit the values in different bases | 3| Week 8| Week 10 |  Deion|
+| 35| Develop an option to view assembly alongside source code. |3 | Week 6 | Week 8 |  Deion|
+| 36| Develop a syntax highlighting system (RegEx?) |3 | Week8 | Week 11 | Wayne |
+| 37| Implement for x86 Assembly | 3| Week 5 | Week 11 | Wayne |
+| 38| Implement for C | 2,3| Week 5 | Week 11 | Wayne |
+| 39| Implement for C++ |2,3 | Week 5 | Week 11 | James |
+| 40| Implement a command line interface to interact with the debugger |3 | Week 10 | Week 12 | Wayne |
+| 41| Create a generalized platform layer where all operating system interactions have to go through this layer.  This will help make the debugger easy to port to new operating systems. |3 | Week 11 | Week 13 | Wayne |
+| 42| Implement: Catch and interpret program exceptions. - Windows |3 | Week 5 | Week 13 | James |
+| 43| Implement for other languages (add to this list) |4 | Week 12 | Week 13 | Wayne |
+| 44| Implement some kind of communication system with a running debugger for remote controlling |4 | Week 12| 13 | Wayne |
+| 45| Test all code from Milestones 2, 3, and 4 and add additional features that were mentioned in requirements that would be great to have to enhance competitiveness (i.e. AI features, error interpretation, suggestions for runtime error repair/code changes), but are not necessary for a functioning debugger, may not be able to be completed by the project deadline, and has do be done at own risk without causing regressions in prior functionality. | 5 | Week 11 | Week 15 | Wayne, James, Deion |
 # Table 3: Effort Matrix
 | Task# | %Effort James | %Effort Wayne | %Effort Deion |
 |:-----:| :-----------: | :------------:|:-------------:|
@@ -103,6 +103,3 @@
 |43 | 2.5 |95 | 2.5 |
 |44 | 2.5 |95 | 2.5 |
 |45 | 2.5 |95 | 2.5 |
-
-
-
