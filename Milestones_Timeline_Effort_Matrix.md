@@ -1,4 +1,4 @@
-# Anticipated Milestones
+# Table 1: Anticipated Milestones
 | Milestone #      | Description | Completion Date |
 | :-------------:| :-----------: | :---------------:|
 | 1 | Research and get comfortable with various GUI API's and write a basic application in each of them.  Decide how the backbone is going to interract with the GUI. | Week 0 (Prior to Semester) to End of Week 1 at latest
@@ -7,7 +7,7 @@
 |4| Continue to iron out bugs from Milestone 3 and maybe 2 again and implement the additional remote-control features and potentially attempt to implement the debugger in other languages to enhance portability. |End of Week 14|
 |5| Test again for additional bugs in milestones 2,3, and 4, assure that many issues are fixed, and if time persists, attempt to add features which were discussed in the initial requirements, but are not on the list. |End of Semester (Week 15 1/2)|
 
-# Table 1: Timeline
+# Table 2: Timeline
 | Task# | Description | Associated Milestone # | Start Date | Completion Date | Primary Responsibility
 |:------| :--------: | :---------------------:|:-----------:|:---------------:|:----------------------:|
 |1 | Create a basic application using Qt - Windows |1 | Week 0 | Week 1 | Deion        |
@@ -58,48 +58,48 @@
 # Table 3: Effort Matrix
 | Task# | %Effort James | %Effort Wayne | %Effort Deion |
 |:-----:| :-----------: | :------------:|:-------------:|
-|1 | 2.5 |95 | 2.5 |
-|2 | 2.5 |95 | 2.5 |
-|3 | 2.5 |95 | 2.5 |
-|4 | 2.5 |95 | 2.5 |
-|5 | 2.5 |95 | 2.5 |
-|6 | 2.5 |95 | 2.5 |
-|7 | 2.5 |95 | 2.5 |
-|8 | 2.5 |95 | 2.5 |
-|9 | 2.5 |95 | 2.5 |
-|10 | 2.5 |95 | 2.5 |
-|11 | 2.5 |95 | 2.5 |
-|12 | 2.5 |95 | 2.5 |
-|13 | 2.5 |95 | 2.5 |
-|14 | 2.5 |95 | 2.5 |
-|15 | 2.5 |95 | 2.5 |
-|16 | 2.5 |95 | 2.5 |
-|17 | 2.5 |95 | 2.5 |
-|18 | 2.5 |95 | 2.5 |
-|19 | 2.5 |95 | 2.5 |
-|20 | 2.5 |95 | 2.5 |
-|21 | 2.5 |95 | 2.5 |
-|22 | 2.5 |95 | 2.5 |
-|23 | 2.5 |95 | 2.5 |
-|24 | 2.5 |95 | 2.5 |
-|25 | 2.5 |95 | 2.5 |
-|26 | 2.5 |95 | 2.5 |
-|27 | 2.5 |95 | 2.5 |
-|28 | 2.5 |95 | 2.5 |
-|29 | 2.5 |95 | 2.5 |
-|30 | 2.5 |95 | 2.5 |
-|31 | 2.5 |95 | 2.5 |
-|32 | 2.5 |95 | 2.5 |
-|33 | 2.5 |95 | 2.5 |
-|34 | 2.5 |95 | 2.5 |
-|35 | 2.5 |95 | 2.5 |
-|36 | 2.5 |95 | 2.5 |
-|37 | 2.5 |95 | 2.5 |
-|38 | 2.5 |95 | 2.5 |
-|39 | 2.5 |95 | 2.5 |
-|40 | 2.5 |95 | 2.5 |
-|41 | 2.5 |95 | 2.5 |
-|42 | 2.5 |95 | 2.5 |
-|43 | 2.5 |95 | 2.5 |
-|44 | 2.5 |95 | 2.5 |
-|45 | 2.5 |95 | 2.5 |
+|1 | 25 |25 | 50 |
+|2 | 25 |25 | 50  |
+|3 | 25 |50 | 25 |
+|4 | 50 |25 | 25 |
+|5 | 25 |25 | 50  |
+|6 | 25 |25 | 50  |
+|7 | 25 |50 | 25 |
+|8 | 50 |25 | 25 |
+|9 | 25 |50 | 25 |
+|10 | 50 |25 | 25 |
+|11 | 25 |25 | 50  |
+|12 | 50 |25 | 25 |
+|13 | 50 |25 | 25 |
+|14 | 25 |25 | 50  |
+|15 | 25 |25 | 50  |
+|16 | 25 |25 | 50  |
+|17 | 25 |25 | 50  |
+|18 | 25 |25 | 50  |
+|19 | 25 |25 | 50  |
+|20 | 50 |25 | 25 |
+|21 | 50 |25 | 25 |
+|22 | 50 |25 | 25 |
+|23 | 50 |25 | 25 |
+|24 | 50 |25 | 25 |
+|25 | 50 |25 | 25 |
+|26 | 50 |25 | 25 |
+|27 | 25 |50 | 25 |
+|28 | 25 |50 | 25 |
+|29 | 25 |50 | 25 |
+|30 | 25 |50 | 25 |
+|31 | 25 |50 | 25 |
+|32 | 25 |50 | 25 |
+|33 | 25 |25 | 50 |
+|34 | 25 |25 | 50  |
+|35 | 25 |25 | 50  |
+|36 | 25 |50 | 25 |
+|37 | 25 |50 | 25 |
+|38 | 25 |50 | 25 |
+|39 | 50 |25 | 25|
+|40 | 25 |50 | 25 |
+|41 | 25 |50 | 25 |
+|42 | 50 |25 | 25 |
+|43 | 25 |50 | 25 |
+|44 | 25 |50 | 25 |
+|45 | 33 |33 | 34 |
