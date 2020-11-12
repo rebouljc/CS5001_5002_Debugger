@@ -9,6 +9,8 @@ a lot more love in the debugger department.
 * list of debug data formats: <https://en.wikipedia.org/wiki/Debugging_data_format>
 * introduction to the DWARF format: <http://www.dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf>
 
+**Some debuggers I find interesting**
+* Windows debugger using Dear ImGUI and very little 3rd party libraries: <https://remedybg.itch.io/remedybg>
 
 **Source Code for lldb and gdb**
 * lldb: <https://lldb.llvm.org/resources/contributing.html>
