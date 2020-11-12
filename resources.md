@@ -5,6 +5,9 @@ It seems like there is better documentation for debugging on Windows, however I 
 a lot more love in the debugger department.
 
 ## Debugger side of things
+**General resources**
+* list of debug data formats: <https://en.wikipedia.org/wiki/Debugging_data_format>
+
 
 **Source Code for lldb and gdb**
 * lldb: <https://lldb.llvm.org/resources/contributing.html>
@@ -24,10 +27,10 @@ architecture might look like.
 * Linux Blog for how to make a debugger: <https://blog.tartanllama.xyz/writing-a-linux-debugger-setup/>
 
 ## GUI side of things
-We have a few options we could consider, and maybe we should try a couple before sticking to one option.
-Some frameworks that I know of:
+I believe we should go with C++ Qt as our Graphics framework for three reasons: Qt is cross-platform, Qt is good for more static UI's, C++ means we don't have to package Python with our exe.
 
-* [Qt](https://doc.qt.io/) (PyQt or just plain C++ Qt) (Wayne is particularly familiar with PyQt)
-* [ImGui](https://github.com/ocornut/imgui) which is a C++ graphics library that I have heard good things about.
-* [GTK](https://www.gtk.org/)
-* [Aura]( https://www.chromium.org/developers/design-documents/aura-desktop-window-manager) This is supposed to be a lightweight cross-platform graphics library by Google
+To install the Qt tools (free), you will need to download the [Qt Installer](https://www.qt.io/download-qt-installer) and [create a profile](https://login.qt.io/register).
+
+* [Qt Installer](https://www.qt.io/download-qt-installer)
+* [Qt Documentation](https://doc.qt.io/)
+
