@@ -7,6 +7,7 @@ a lot more love in the debugger department.
 ## Debugger side of things
 **General resources**
 * list of debug data formats: <https://en.wikipedia.org/wiki/Debugging_data_format>
+* introduction to the DWARF format: <http://www.dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf>
 
 
 **Source Code for lldb and gdb**
