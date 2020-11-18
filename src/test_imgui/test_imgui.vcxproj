@@ -74,8 +74,9 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dx9_win32_platform_main.cpp" />
     <ClCompile Include="main_ui.cpp" />
-    <ClCompile Include="platform_main.cpp" />
+    <ClCompile Include="sdl_opengl3_platform_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main_ui.h" />
