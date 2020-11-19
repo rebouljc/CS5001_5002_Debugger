@@ -8,7 +8,7 @@ void init_vars(Persistant_Vars *vars) {
 	vars->show_demo_window= true;
 	vars->show_yet_another_window= false;
 
-	vars->clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
+	vars->clear_color = ImVec4(1.00f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	// Should change that dependency in the future
 }
 
