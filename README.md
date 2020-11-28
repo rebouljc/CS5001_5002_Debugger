@@ -38,5 +38,3 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 
 **Appendix**
 * [resources.md](https://github.com/rebouljc/CS5001_5002_Debugger/blob/master/resources.md): Where you can find the current resources we are researching.
-
-**Project Topic Area:** Easy-to-use and Easy-to-port Debugger.
