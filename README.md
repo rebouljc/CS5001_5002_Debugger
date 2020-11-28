@@ -8,11 +8,11 @@ Repository for CS5001/5002 Senior Design Debugger Project.  Team Members: James 
 
 **Faculty Advisor:** **TBD** - potentially Dr. Yiming Hu | huyg@ucmail.uc.edu - waiting for confirmation.
 
-**Project Desription**
+**Project Desription**  
 Smashin' Debugger is a project to create a debugger designed to be lightweight, portable, and easy to use for both experienced and inexperienced developers. 
 The goal of the architecture design it to be easy to port/implement new programming languages, instruction sets, debug-data formats, and operating systems.  
 
-**User Stories and Design Diagrams**
+**User Stories and Design Diagrams**  
 User Stories can be found [here](Essays/User_Stories.md).  
 Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/documents/embeddedchart/6df60338-f906-4b01-a24a-0f9d3a1e2053).
 
