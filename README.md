@@ -21,7 +21,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * [Timeline and Effort Matrix](Essays/Milestones_Timeline_Effort_Matrix.md)
 
 **Fall Report Powerpoint Slides**
-The powerpoint slides can be found [here](https://drive.google.com/file/d/1uEYCghGHuXhhrNPanpcJ8pSuRX5kiN23/view?usp=sharing)
+* The powerpoint slides can be found [here](https://drive.google.com/file/d/1uEYCghGHuXhhrNPanpcJ8pSuRX5kiN23/view?usp=sharing)
 
 **Self-Assessment Essays**
 * [James Reboulet](Essays/JamesRebouletEssays/Capstone%20Assessment%20-%20James%20C.%20Reboulet%20(CS).md)
@@ -34,9 +34,9 @@ The powerpoint slides can be found [here](https://drive.google.com/file/d/1uEYCg
 * [Deion Booher](Essays/DeionBooherEssays/Professional%20Biography%20Deion.md)
 
 **Budget**
-This project has not and does not plan to have any expenses. 
+* This project has not and does not plan to have any expenses. 
 
 **Appendix**
-You can find the current resources we are reading in our <resources.md> file. 
+* [resources.md](https://github.com/rebouljc/CS5001_5002_Debugger/blob/master/resources.md): Where you can find the current resources we are researching.
 
 **Project Topic Area:** Easy-to-use and Easy-to-port Debugger.
