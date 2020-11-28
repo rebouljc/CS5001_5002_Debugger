@@ -24,14 +24,14 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 The powerpoint slides can be found [here](https://drive.google.com/file/d/1uEYCghGHuXhhrNPanpcJ8pSuRX5kiN23/view?usp=sharing)
 
 **Self-Assessment Essays**
-* [James Reboulet](Essays/JamesReboluetEssays/Capstone Assessment - James C. Reboluet (CS).md)
+* [James Reboulet](Essays/JamesRebouletEssays/Capstone%20Assessment%20-%20James%20C.%20Reboulet%20(CS).md)
 * [Wayne Hafely](Essays/WayneHafelyEssays/IndividualCapstoneAssessment.md)
-* [Deion Booher](Essays/DeionBooherEssays/DeionBooher Capstone Assessment.md)
+* [Deion Booher](Essays/DeionBooherEssays/DeionBooher%20Capstone%20Assessment.md)
 
 **Professional Biographies**
 * [James Reboulet](Essays/JamesReboluetEssays/ProfessionalResume.md)
 * [Wayne Hafely](Essays/WayneHafelyEssays/ProfessionalBiography.md)
-* [Deion Booher](Essays/DeionBooherEssays/Professional Biography Deion.md)
+* [Deion Booher](Essays/DeionBooherEssays/Professional%20Biography%20Deion.md)
 
 **Budget**
 This project has not and does not plan to have any expenses. 
