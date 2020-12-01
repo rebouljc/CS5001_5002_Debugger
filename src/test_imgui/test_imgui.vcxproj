@@ -77,8 +77,10 @@
     <ClCompile Include="dx9_win32_platform_main.cpp" />
     <ClCompile Include="main_ui.cpp" />
     <ClCompile Include="sdl_opengl3_platform_main.cpp" />
+    <ClCompile Include="windows_platform_debugger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="debugger.h" />
     <ClInclude Include="main_ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

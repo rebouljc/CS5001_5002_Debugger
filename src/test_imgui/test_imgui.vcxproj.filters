@@ -24,9 +24,15 @@
     <ClCompile Include="dx9_win32_platform_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="windows_platform_debugger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main_ui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

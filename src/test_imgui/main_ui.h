@@ -7,6 +7,8 @@ struct Persistant_Vars {
 	bool show_yet_another_window;
     uint64_t rax;
 	ImVec4 clear_color;
+	int num_registers;
+	int num_processes;
 };
 
 void init_vars(Persistant_Vars *vars);

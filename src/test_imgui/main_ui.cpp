@@ -1,6 +1,7 @@
 
 #include "main_ui.h"
 #include "imgui.h"
+#include "debugger.h"
 
 
 void init_vars(Persistant_Vars *vars) { 
@@ -9,7 +10,28 @@ void init_vars(Persistant_Vars *vars) {
 	vars->show_yet_another_window= false;
     vars->rax = 0;
 	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
+	vars->num_registers = Debugger::get_number_registers();
+	vars->num_processes = Debugger::list_of_pids((unsigned long**)0, 0);
 	// Should change that dependency in the future
+}
+
+void draw_cpu_registers(int num_registers) {
+    ImGui::Begin("CPU Registers");
+
+	for (int i = 0; i < num_registers; i++) {
+		ImGui::Text("r%i", i);
+	}
+
+    ImGui::End();
+}
+
+void draw_processes(int num_processes) {
+	ImGui::Begin("Processes");
+	for (int i = 0; i < num_processes; i++) {
+		ImGui::Text("process %i", i);
+	}
+
+    ImGui::End();
 }
 
 void main_ui_loop(Persistant_Vars *vars) {
@@ -63,16 +85,8 @@ void main_ui_loop(Persistant_Vars *vars) {
 	}
 
     // Maybe this can be some sort of widget for showing the cpu registers
-    ImGui::Begin("CPU Registers");
-
-    ImGui::Text("rax: ");
-    ImGui::SameLine();
-    ImGui::InputScalar("rax", ImGuiDataType_U64, &vars->rax, NULL, NULL, "%08X", ImGuiInputTextFlags_CharsHexadecimal);
-    ImGui::Text("rcx: ");
-    ImGui::Text("rdx: ");
-    ImGui::Text("rbx: ");
-
-    ImGui::End();
+	draw_cpu_registers(vars->num_registers);
+	draw_processes(vars->num_processes);
 
 
 }
