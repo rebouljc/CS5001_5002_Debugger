@@ -7,6 +7,10 @@
 # Imgui ini file
 imgui.ini
 
+# build files
+*.o
+linux_test_imgui
+
 # User-specific files
 *.rsuser
 *.suo
