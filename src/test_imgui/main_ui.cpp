@@ -7,8 +7,8 @@ void init_vars(Persistant_Vars *vars) {
 	vars->show_another_window = false;
 	vars->show_demo_window= true;
 	vars->show_yet_another_window= false;
-
-	vars->clear_color = ImVec4(1.00f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
+    vars->rax = 0;
+	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	// Should change that dependency in the future
 }
 
@@ -61,5 +61,18 @@ void main_ui_loop(Persistant_Vars *vars) {
 		ImGui::End();
 
 	}
+
+    // Maybe this can be some sort of widget for showing the cpu registers
+    ImGui::Begin("CPU Registers");
+
+    ImGui::Text("rax: ");
+    ImGui::SameLine();
+    ImGui::InputScalar("rax", ImGuiDataType_U64, &vars->rax, NULL, NULL, "%08X", ImGuiInputTextFlags_CharsHexadecimal);
+    ImGui::Text("rcx: ");
+    ImGui::Text("rdx: ");
+    ImGui::Text("rbx: ");
+
+    ImGui::End();
+
 
 }

@@ -1,9 +1,11 @@
 #include "imgui.h"
+#include <stdint.h>
 
 struct Persistant_Vars {
 	bool show_demo_window;
 	bool show_another_window;
 	bool show_yet_another_window;
+    uint64_t rax;
 	ImVec4 clear_color;
 };
 
