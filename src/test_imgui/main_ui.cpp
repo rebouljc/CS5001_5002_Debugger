@@ -4,6 +4,8 @@
 #include "debugger.h"
 
 
+void demo_code(Persistant_Vars *vars);
+
 void init_vars(Persistant_Vars *vars) { 
 	vars->show_another_window = false;
 	vars->show_demo_window= true;
@@ -16,6 +18,7 @@ void init_vars(Persistant_Vars *vars) {
 }
 
 void draw_cpu_registers(int num_registers) {
+    // Maybe this can be some sort of widget for showing the cpu registers
     ImGui::Begin("CPU Registers");
 
 	for (int i = 0; i < num_registers; i++) {
@@ -27,14 +30,20 @@ void draw_cpu_registers(int num_registers) {
 
 void draw_processes(int num_processes) {
 	ImGui::Begin("Processes");
+    ImGui::Text("Num Processes: %i", num_processes);
 	for (int i = 0; i < num_processes; i++) {
 		ImGui::Text("process %i", i);
 	}
-
     ImGui::End();
 }
 
 void main_ui_loop(Persistant_Vars *vars) {
+	draw_cpu_registers(vars->num_registers);
+	draw_processes(vars->num_processes);
+    demo_code(vars);
+}
+
+void demo_code(Persistant_Vars *vars){
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (vars->show_demo_window)
@@ -83,10 +92,5 @@ void main_ui_loop(Persistant_Vars *vars) {
 		ImGui::End();
 
 	}
-
-    // Maybe this can be some sort of widget for showing the cpu registers
-	draw_cpu_registers(vars->num_registers);
-	draw_processes(vars->num_processes);
-
 
 }
