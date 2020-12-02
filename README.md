@@ -6,7 +6,7 @@ Repository for CS5001/5002 Senior Design Debugger Project.  Team Members: James 
 * Wayne Malcolm Hafely | *Computer Science* | hafelywm@mail.uc.edu
 * Deion Booher | *Computer Science* | booherds@mail.uc.edu
 
-**Faculty Advisor:** **TBD** - potentially Dr. Yiming Hu | huyg@ucmail.uc.edu - waiting for confirmation.
+**Faculty Advisor:** Dr. Yiming Hu | huyg@ucmail.uc.edu
 
 **Project Desription**  
 Smashin' Debugger is a project to create a debugger designed to be lightweight, portable, and easy to use for both experienced and inexperienced developers. 
