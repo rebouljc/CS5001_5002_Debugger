@@ -1,7 +1,7 @@
 
 #include "main_ui.h"
 #include "imgui.h"
-#include "debugger.h"
+//#include "debugger.h"
 
 
 void demo_code(Persistant_Vars *vars);
@@ -13,7 +13,8 @@ void init_vars(Persistant_Vars *vars) {
     vars->rax = 0;
 	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	vars->num_registers = Debugger::get_number_registers();
-	vars->num_processes = Debugger::list_of_pids((unsigned long**)0, 0);
+
+	vars->num_processes = Debugger::list_of_processes(vars->processes, 1000);
 	// Should change that dependency in the future
 }
 
@@ -28,18 +29,36 @@ void draw_cpu_registers(int num_registers) {
     ImGui::End();
 }
 
-void draw_processes(int num_processes) {
+void draw_processes(Debugger::Process* processes, unsigned long num_processes) {
 	ImGui::Begin("Processes");
+
+	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.0f);
     ImGui::Text("Num Processes: %i", num_processes);
+
+	ImGui::Columns(3);
+	ImGui::Separator();
+	ImGui::Text("#"); ImGui::NextColumn();
+	ImGui::Text("PID"); ImGui::NextColumn();
+	ImGui::Text("Short Name"); ImGui::NextColumn();
+	ImGui::Separator();
+
+	// TODO: move this static variable to Persistant_Vars
+	//static int selected = -1;
+
 	for (int i = 0; i < num_processes; i++) {
-		ImGui::Text("process %i", i);
+		//ImGui::Text("Processes: %s\tPID: %i", processes[i].short_name, processes[i].pid);
+		ImGui::Text("%i", i); ImGui::NextColumn();
+		ImGui::Text("%i", processes[i].pid); ImGui::NextColumn();
+		ImGui::Selectable(processes[i].short_name, false, ImGuiSelectableFlags_SpanAllColumns); ImGui::NextColumn();
+		//ImGui::Text("%s", processes[i].short_name); ImGui::NextColumn();
 	}
+	ImGui::PopStyleVar();
     ImGui::End();
 }
 
 void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
-	draw_processes(vars->num_processes);
+	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
 }
 

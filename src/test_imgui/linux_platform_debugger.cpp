@@ -6,6 +6,6 @@ int Debugger::get_number_registers(){
         return 10;
 }
 
-unsigned long Debugger::list_of_pids(unsigned long** out_pids, unsigned long max){
-        return 10;
+unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsigned long max){
+        return 0;
 }

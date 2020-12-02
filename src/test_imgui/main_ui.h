@@ -1,4 +1,5 @@
 #include "imgui.h"
+#include "debugger.h"
 #include <stdint.h>
 
 struct Persistant_Vars {
@@ -9,6 +10,7 @@ struct Persistant_Vars {
 	ImVec4 clear_color;
 	int num_registers;
 	unsigned long num_processes;
+	Debugger::Process processes[1000];
 };
 
 void init_vars(Persistant_Vars *vars);
