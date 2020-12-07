@@ -21,6 +21,7 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 
 	TCHAR szProcessName[MAX_PATH] = TEXT("<unkown>");
 	HANDLE hProcess;
+	char* unkown_text = "<unkown>";
 	for (DWORD i = 0; i < cProcesses && i < max; i++) {
 		out_processes[i].pid = (unsigned int)aProcesses[i];
 		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, aProcesses[i]);
@@ -33,7 +34,9 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 				GetModuleBaseName(hProcess, hMod, szProcessName, sizeof(szProcessName) / sizeof(TCHAR));
 				//memcpy(out_processes[i].short_name, szProcessName, sizeof(out_processes[i].short_name) / sizeof(char));
 				if (szProcessName[0] == '\0') {
-					strcpy(out_processes[i].short_name, "<unkown>");
+					for (int x = 0; x < 8; x++) {
+						out_processes[x].short_name[x] = unkown_text[x];
+					}
 				}
 				else {
 					for (int x = 0; x < 50; x++) {
@@ -42,7 +45,9 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 				}
 			}
 			else {
-				strcpy(out_processes[i].short_name, "<unkown>");
+				for (int x = 0; x < 8; x++) {
+					out_processes[x].short_name[x] = unkown_text[x];
+				}
 			}
 			//_tprintf(TEXT("%s (PID: %u)\n"), szProcessName, aProcesses[i]);
 		}

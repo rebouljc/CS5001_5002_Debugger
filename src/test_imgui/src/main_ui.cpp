@@ -1,4 +1,3 @@
-
 #include "main_ui.h"
 #include "imgui.h"
 //#include "debugger.h"
@@ -13,7 +12,7 @@ void init_vars(Persistant_Vars *vars) {
     vars->rax = 0;
 	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	vars->num_registers = Debugger::get_number_registers();
-
+	memset(vars->processes, 0, sizeof(vars->processes));
 	vars->num_processes = Debugger::list_of_processes(vars->processes, 1000);
 	// Should change that dependency in the future
 }
