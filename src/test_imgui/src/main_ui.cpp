@@ -13,7 +13,7 @@ void init_vars(Persistant_Vars *vars) {
 	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	vars->num_registers = Debugger::get_number_registers();
 	memset(vars->processes, 0, sizeof(vars->processes));
-	vars->num_processes = Debugger::list_of_processes(vars->processes, 1000);
+	vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
 	// Should change that dependency in the future
 }
 
@@ -28,13 +28,27 @@ void draw_cpu_registers(int num_registers) {
     ImGui::End();
 }
 
-void draw_processes(Debugger::Process* processes, unsigned long num_processes) {
+void draw_processes(Debugger::Process* processes, unsigned long &num_processes) {
+	static ImGuiTextFilter filter; // TODO: move to PersistantVars
+	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
 	ImGui::Begin("Processes");
 
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.0f);
     ImGui::Text("Num Processes: %i", num_processes);
+	ImGui::SameLine();
+    ImGui::Text("Num Displayed: %i", processes_displayed);
+	ImGui::SameLine();
 
+
+	if (ImGui::Button("Refresh")) {
+		num_processes = Debugger::list_of_processes(processes, DEBUGGER_MAX_PROCESSES);
+	}
+	// TODO: do something about column widths
 	ImGui::Columns(3);
+	ImGui::NextColumn();
+	ImGui::NextColumn();
+	filter.Draw();
+	ImGui::NextColumn();
 	ImGui::Separator();
 	ImGui::Text("#"); ImGui::NextColumn();
 	ImGui::Text("PID"); ImGui::NextColumn();
@@ -44,18 +58,29 @@ void draw_processes(Debugger::Process* processes, unsigned long num_processes) {
 	// TODO: move this static variable to Persistant_Vars
 	//static int selected = -1;
 
+	processes_displayed = 0;
 	for (int i = 0; i < num_processes; i++) {
 		//ImGui::Text("Processes: %s\tPID: %i", processes[i].short_name, processes[i].pid);
-		ImGui::Text("%i", i); ImGui::NextColumn();
-		ImGui::Text("%i", processes[i].pid); ImGui::NextColumn();
-		ImGui::Selectable(processes[i].short_name, false, ImGuiSelectableFlags_SpanAllColumns); ImGui::NextColumn();
-		//ImGui::Text("%s", processes[i].short_name); ImGui::NextColumn();
+		if (filter.PassFilter(processes[i].short_name)) {
+			processes_displayed++;
+			ImGui::Text("%i", i); ImGui::NextColumn();
+			ImGui::Text("%i", processes[i].pid); ImGui::NextColumn();
+			ImGui::Selectable(processes[i].short_name, false, ImGuiSelectableFlags_SpanAllColumns); ImGui::NextColumn();
+			//ImGui::Text("%s", processes[i].short_name); ImGui::NextColumn();
+		}
 	}
 	ImGui::PopStyleVar();
     ImGui::End();
 }
 
 void main_ui_loop(Persistant_Vars *vars) {
+	
+	// Refresh the list of process about every 4 seconds (depending on frame rate)
+	if (vars->refresh_processes_timer++ > ImGui::GetIO().Framerate *4) { // TODO: not sure if we're going to keep this
+		vars->refresh_processes_timer = 0;
+		vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
+	}
+
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);

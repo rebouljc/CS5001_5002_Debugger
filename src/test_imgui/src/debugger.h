@@ -1,6 +1,8 @@
 
 namespace Debugger {
 
+	#define DEBUGGER_MAX_PROCESSES 1000
+
 	struct Process {
 		unsigned long pid;
 		char short_name[50];

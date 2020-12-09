@@ -9,6 +9,8 @@ struct Persistant_Vars {
     uint64_t rax;
 	ImVec4 clear_color;
 	int num_registers;
+
+	unsigned long refresh_processes_timer = 0;
 	unsigned long num_processes;
 	Debugger::Process processes[1000];
 };
