@@ -14,20 +14,22 @@
 #CXX = g++
 #CXX = clang++
 
-EXE = linux_test_imgui
 IMGUI_DIR = ./imgui
 SRC_DIR = src
 LINUX_DIR = src_linux
+BUILD_DIR = build
+
+EXE = $(BUILD_DIR)/linux_test_imgui
 
 SOURCES = $(SRC_DIR)/main_ui.cpp
 SOURCES += $(LINUX_DIR)/sdl_opengl3_platform_main.cpp $(LINUX_DIR)/linux_platform_debugger.cpp
 
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
-OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
+OBJS = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
 UNAME_S := $(shell uname -s)
 
-CXXFLAGS = -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+CXXFLAGS = -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I $(SRC_DIR) -I $(LINUX_DIR)
 CXXFLAGS += -g -Wall -Wformat
 LIBS =
 
@@ -95,32 +97,36 @@ endif
 ## BUILD RULES
 ##---------------------------------------------------------------------
 
-%.o:%.cpp
+$(BUILD_DIR)/%.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/%.cpp
+$(BUILD_DIR)/%.o:$(IMGUI_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/backends/%.cpp
+$(BUILD_DIR)/%.o:$(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/examples/libs/gl3w/GL/%.c
+$(BUILD_DIR)/%.o:$(IMGUI_DIR)/examples/libs/gl3w/GL/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/examples/libs/glad/src/%.c
+$(BUILD_DIR)/%.o:$(IMGUI_DIR)/examples/libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-%.o:$(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o:$(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(LINUX_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I $(SRC_DIR) -c -o $@ $<
+$(BUILD_DIR)/%.o:$(LINUX_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-all: $(EXE)
+all: | make_build_dir $(EXE) 
 	@echo Build complete for $(ECHO_MESSAGE)
 
 $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
+make_build_dir:
+	@mkdir -p build
+
 clean:
 	rm -f $(EXE) $(OBJS)
+	rm -R build
