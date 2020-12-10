@@ -16,7 +16,12 @@
 
 EXE = linux_test_imgui
 IMGUI_DIR = ./imgui
-SOURCES = main_ui.cpp, sdl_opengl3_platform_main.cpp linux_platform_debugger.cpp
+SRC_DIR = src
+LINUX_DIR = src_linux
+
+SOURCES = $(SRC_DIR)/main_ui.cpp
+SOURCES += $(LINUX_DIR)/sdl_opengl3_platform_main.cpp $(LINUX_DIR)/linux_platform_debugger.cpp
+
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
@@ -104,6 +109,12 @@ endif
 
 %.o:$(IMGUI_DIR)/examples/libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+%.o:$(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+%.o:$(LINUX_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -I $(SRC_DIR) -c -o $@ $<
 
 all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
