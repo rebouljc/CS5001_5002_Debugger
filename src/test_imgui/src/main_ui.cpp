@@ -6,6 +6,7 @@
 void demo_code(Persistant_Vars *vars);
 
 void init_vars(Persistant_Vars* vars) {
+	Debugger::debug_init(&vars->debug_data);
 	vars->show_another_window = false;
 	vars->show_demo_window = true;
 	vars->show_yet_another_window = false;
@@ -14,7 +15,6 @@ void init_vars(Persistant_Vars* vars) {
 	vars->num_registers = Debugger::get_number_registers();
 	memset(vars->processes, 0, sizeof(vars->processes));
 	vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
-	vars->debug_data.exe_path[0] = 0;
 	// Should change that dependency in the future
 }
 
@@ -65,7 +65,7 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 		if (filter.PassFilter(processes[i].short_name)) {
 			processes_displayed++;
 			ImGui::Text("%i", i); ImGui::NextColumn();
-			ImGui::Text("%i", processes[i].pid); ImGui::NextColumn();
+			ImGui::Text("%u", processes[i].pid); ImGui::NextColumn();
 			ImGui::Selectable(processes[i].short_name, false, ImGuiSelectableFlags_SpanAllColumns); ImGui::NextColumn();
 			//ImGui::Text("%s", processes[i].short_name); ImGui::NextColumn();
 		}
@@ -79,6 +79,18 @@ void draw_start_window(Persistant_Vars* vars) {
 	ImGui::InputText("Exe Path: ", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
+	}
+	if (vars->debug_data.running) {
+		ImGui::Text("PID: %u", vars->debug_data.pid);
+		ImGui::Text("TID: %u", vars->debug_data.tid);
+	}
+	ImGui::Text("Debugging: ");
+	ImGui::SameLine();
+	if (vars->debug_data.debugging) {
+		ImGui::Text("True");
+	}
+	else {
+		ImGui::Text("False");
 	}
 	ImGui::End();
 }
@@ -97,6 +109,11 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
+	
+
+	// Should this be here or should we call this from
+	// the platform layer???
+	Debugger::debug_loop(&vars->debug_data);
 }
 
 void demo_code(Persistant_Vars *vars){
