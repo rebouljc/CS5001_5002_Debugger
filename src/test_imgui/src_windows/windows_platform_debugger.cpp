@@ -4,7 +4,7 @@
 #include <tchar.h>
 #include <stdio.h> // temporary include
 
-void EnterDebugLoop(const LPDEBUG_EVENT debug_event, DWORD pid);
+void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData* data);
 
 int Debugger::get_number_registers() {
 	return 10;
@@ -37,7 +37,7 @@ int Debugger::debug_init(Debugger::DebuggerData* data) {
 
 int Debugger::debug_loop(Debugger::DebuggerData* data) {
 	DEBUG_EVENT debug_event = { 0 };
-	EnterDebugLoop(&debug_event, data->pid);
+	EnterDebugLoop(&debug_event, data);
 	return 0;
 }
 
@@ -138,13 +138,13 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 
 // This is the windows way of checking for debug events
 // from the target process
-void EnterDebugLoop(const LPDEBUG_EVENT debug_event, DWORD pid) {
+void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *data) {
 	WaitForDebugEvent(debug_event, 0);  // Check for an event and then continue. Non-blocking
 
 	// This might allow us to debug multiple processes at the same time
 	// not sure how useful that's going to be.
 	// But it's here...
-	if (debug_event->dwDebugEventCode  == 0 || debug_event->dwProcessId != pid) {
+	if (debug_event->dwDebugEventCode  == 0 || debug_event->dwProcessId != data->pid) {
 		return;
 	}
 
@@ -165,6 +165,8 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, DWORD pid) {
 		break;
 	case EXIT_PROCESS_DEBUG_EVENT:
 		printf("exit process event\n");
+		data->running = false;
+		data->debugging = false;
 		ContinueDebugEvent(debug_event->dwProcessId, debug_event->dwThreadId, DBG_CONTINUE);
 		break;
 	case EXIT_THREAD_DEBUG_EVENT:
