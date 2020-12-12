@@ -13,6 +13,7 @@ struct Persistant_Vars {
 	unsigned long refresh_processes_timer = 0;
 	unsigned long num_processes;
 	Debugger::Process processes[1000];
+	Debugger::DebuggerData debug_data;
 };
 
 void init_vars(Persistant_Vars *vars);

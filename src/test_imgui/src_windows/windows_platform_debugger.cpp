@@ -8,6 +8,42 @@ int Debugger::get_number_registers() {
 	return 10;
 }
 
+int Debugger::start_and_debug_exe(Debugger::DebuggerData* data){
+	// We might need some memory from the platform layer for
+	// general allocation for the operating system specific
+	// debugger implementation. 
+	// For example, it might be important for us to keep 
+	// a handle on STARTUPINFO si and PROCESS_INFORMATION pi
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	// UTF-8 problems :( there's definately a better way to handle this
+	WCHAR path[DEBUGGER_MAX_PATH];
+	for (int i = 0; i < DEBUGGER_MAX_PATH; i++){
+		path[i] = data->exe_path[i];
+	}
+
+	// Just start the process for now
+	if (!CreateProcess(NULL,
+		path,
+		NULL,
+		NULL,
+		FALSE,
+		0,
+		NULL,
+		NULL, &si, &pi)) {
+		printf("CreateProcess failed (%d).\n", GetLastError());
+		return 0;
+	}
+
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
+
 unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsigned long max) {
 	DWORD aProcesses[1024], cbNeeded, cProcesses;
 	unsigned int i;

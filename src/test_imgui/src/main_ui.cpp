@@ -5,15 +5,16 @@
 
 void demo_code(Persistant_Vars *vars);
 
-void init_vars(Persistant_Vars *vars) { 
+void init_vars(Persistant_Vars* vars) {
 	vars->show_another_window = false;
-	vars->show_demo_window= true;
-	vars->show_yet_another_window= false;
-    vars->rax = 0;
+	vars->show_demo_window = true;
+	vars->show_yet_another_window = false;
+	vars->rax = 0;
 	vars->clear_color = ImVec4(0.60f, 0.55f, 0.60f, 1.00f); // Don't remove this, the platform_main.cpp uses this to draw the background color
 	vars->num_registers = Debugger::get_number_registers();
 	memset(vars->processes, 0, sizeof(vars->processes));
 	vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
+	vars->debug_data.exe_path[0] = 0;
 	// Should change that dependency in the future
 }
 
@@ -59,7 +60,7 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 	//static int selected = -1;
 
 	processes_displayed = 0;
-	for (int i = 0; i < num_processes; i++) {
+	for (int i = num_processes-1; i >= 0; i--) {
 		//ImGui::Text("Processes: %s\tPID: %i", processes[i].short_name, processes[i].pid);
 		if (filter.PassFilter(processes[i].short_name)) {
 			processes_displayed++;
@@ -73,14 +74,26 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
     ImGui::End();
 }
 
+void draw_start_window(Persistant_Vars* vars) {
+	ImGui::Begin("Start Window");
+	ImGui::InputText("Exe Path: ", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+	if (ImGui::Button("Start Process")) {
+		Debugger::start_and_debug_exe(&vars->debug_data);
+	}
+	ImGui::End();
+}
+
 void main_ui_loop(Persistant_Vars *vars) {
 	
 	// Refresh the list of process about every 4 seconds (depending on frame rate)
 	if (vars->refresh_processes_timer++ > ImGui::GetIO().Framerate *4) { // TODO: not sure if we're going to keep this
+		// There's probably a good time when we shouldn't be updating this all the time.
+		// Like when the window is closed
 		vars->refresh_processes_timer = 0;
 		vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
 	}
 
+	draw_start_window(vars);
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
