@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <Psapi.h>
 #include <tchar.h>
+#include <fileapi.h> // Reading filename from a file handle
 #include <stdio.h> // temporary include
 
 void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData* data);
@@ -146,6 +147,7 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *dat
 	if (debug_event->dwDebugEventCode  == 0 || debug_event->dwProcessId != data->pid) {
 		return;
 	}
+	char dll_name[DEBUGGER_MAX_PATH] = { 0 };
 
 	switch (debug_event->dwDebugEventCode) {
 	case 0: break; // no debug event occurred 
@@ -174,7 +176,8 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *dat
 		ContinueDebugEvent(debug_event->dwProcessId, debug_event->dwThreadId, DBG_CONTINUE);
 		break;
 	case LOAD_DLL_DEBUG_EVENT:
-		printf("load dll event\n");
+		GetFinalPathNameByHandleA(debug_event->u.LoadDll.hFile, dll_name, DEBUGGER_MAX_PATH, FILE_NAME_NORMALIZED);
+		printf("load dll event: %s\n", dll_name);
 		CloseHandle(debug_event->u.LoadDll.hFile);
 		ContinueDebugEvent(debug_event->dwProcessId, debug_event->dwThreadId, DBG_CONTINUE);
 		break;
