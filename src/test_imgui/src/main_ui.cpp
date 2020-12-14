@@ -30,7 +30,7 @@ void draw_cpu_registers(int num_registers) {
 }
 
 void draw_processes(Debugger::Process* processes, unsigned long &num_processes) {
-	static ImGuiTextFilter filter; // TODO: move to PersistantVars
+	static ImGuiTextFilter filter("-..."); // TODO: move to PersistantVars
 	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
 	ImGui::Begin("Processes");
 
