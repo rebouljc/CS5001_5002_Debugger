@@ -12,7 +12,10 @@ int Debugger::get_number_registers() {
 
 int Debugger::debug_init(Debugger::DebuggerData* data) {
 
-	data->exe_path[0] = 0;
+	// We should probably make a memset function
+	for (int i = 0; i < DEBUGGER_MAX_PATH; i++) {
+		data->exe_path[i] = 0;
+	}
 
 	HANDLE handle;
 	// not sure what this size is for...
@@ -101,12 +104,12 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 
 	TCHAR szProcessName[MAX_PATH] = TEXT("<unkown>");
 	HANDLE hProcess;
-	char* unkown_text = "...";
+	const char unkown_text[4] = {'.', '.', '.', 0};
 	for (DWORD i = 0; i < cProcesses && i < max; i++) {
 		out_processes[i].pid = (unsigned long)aProcesses[i];
 		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, aProcesses[i]);
 
-		for (int x = 0; x < 50; x++) {
+		for (int x = 0; x < 4; x++) {
 			out_processes[i].short_name[x] = unkown_text[x];
 		}
 
@@ -117,15 +120,11 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 			if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {
 				GetModuleBaseName(hProcess, hMod, szProcessName, sizeof(szProcessName) / sizeof(TCHAR));
 				//memcpy(out_processes[i].short_name, szProcessName, sizeof(out_processes[i].short_name) / sizeof(char));
-				if (szProcessName[0] == '\0') {
-					for (int x = 0; x < 8; x++) {
-						out_processes[i].short_name[x] = unkown_text[x];
-					}
-				}
-				else {
+				if (szProcessName[0] != '\0') {
 					for (int x = 0; x < 50; x++) {
 						out_processes[i].short_name[x] = szProcessName[x];
 					}
+					out_processes[i].short_name[49] = 0;
 				}
 		}
 			//_tprintf(TEXT("%s (PID: %u)\n"), szProcessName, aProcesses[i]);
