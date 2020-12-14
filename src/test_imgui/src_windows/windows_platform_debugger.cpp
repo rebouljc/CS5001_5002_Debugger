@@ -152,6 +152,7 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *dat
 
 	case CREATE_PROCESS_DEBUG_EVENT:
 		printf("create process event\n");
+		CloseHandle(debug_event->u.CreateProcessInfo.hFile);
 		ContinueDebugEvent(debug_event->dwProcessId, debug_event->dwThreadId, DBG_CONTINUE);
 		break;
 	case CREATE_THREAD_DEBUG_EVENT:
@@ -174,6 +175,7 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *dat
 		break;
 	case LOAD_DLL_DEBUG_EVENT:
 		printf("load dll event\n");
+		CloseHandle(debug_event->u.LoadDll.hFile);
 		ContinueDebugEvent(debug_event->dwProcessId, debug_event->dwThreadId, DBG_CONTINUE);
 		break;
 	case UNLOAD_DLL_DEBUG_EVENT:
