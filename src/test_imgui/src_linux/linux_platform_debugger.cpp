@@ -11,6 +11,10 @@ int Debugger::get_number_registers(){
         return 10;
 }
 
+int Debugger::debug_init(Debugger::DebuggerData* data){ } 
+int Debugger::debug_loop(Debugger::DebuggerData* data){ } 
+int Debugger::start_and_debug_exe(Debugger::DebuggerData* data){ } 
+
 unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsigned long max){
 
         struct dirent* de_DirEntity = 0;
