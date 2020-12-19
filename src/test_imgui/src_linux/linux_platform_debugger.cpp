@@ -1,10 +1,18 @@
-#include <sys/types.h>
+// Maybe eventually we can get rid of all these imports...
+#include <sys/ptrace.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <fcntl.h> // open, read
 #include <unistd.h> // close... why is this not in the same .h as open???
 #include <dirent.h>
 #include <linux/module.h>
 #include <linux/sched.h>
+#include <errno.h> // getting error codes from waitpid
+
+// temporary includes
+#include <cstdio> // printf 
+#include <stdio.h> // printing out the errno error text 
 
 #include "debugger.h"
 
@@ -32,9 +40,73 @@ int Debugger::debug_init(Debugger::DebuggerData* data){
     for(int i = 0; i < DEBUGGER_MAX_PATH; i++){
         data->exe_path[i] = 0;
     }
+    return 0;
 } 
-int Debugger::debug_loop(Debugger::DebuggerData* data){ } 
-int Debugger::start_and_debug_exe(Debugger::DebuggerData* data){ } 
+
+int Debugger::debug_loop(Debugger::DebuggerData* data){
+    int wait_status;
+
+    if(data->debugging){
+        int wait_result = waitpid(data->pid, &wait_status, WNOHANG); 
+        if(wait_result == -1){
+            if(errno == ECHILD){
+                // There are no child processes, so the target process must have died.
+                data->debugging = false;
+                data->running = false;
+            }else{
+                perror("waitpid encountered an error");
+            }
+        }
+        if(wait_status != 0){
+            printf("wait_status: %i\n", wait_status);
+
+            // available macros for interpretting wait_status:
+            // WIFEXITED, WEXITSTATUS, WIFSIGNALED, WTERMSIG, WCOREDUMP, WIFSTOPPED, WSTOPSIG, WIFCONTINUED
+                
+            if(WIFSTOPPED(wait_status)){
+                // I believe this is what is called when we hit a breakpoint
+                printf("stopped\n");
+                ptrace(PTRACE_CONT, data->pid, nullptr, nullptr);
+            }
+            if(WIFEXITED(wait_status)){
+                // Child exited by calling exit(...)
+                // we probably want the exit status of a process
+                printf("exited\n");
+                data->debugging = false;
+                data->running = false;
+                data->pid = 0;
+            }
+            if(WIFSIGNALED(wait_status)){
+                printf("signaled\n");
+            }
+            if(WIFCONTINUED(wait_status)){
+                printf("continued\n");
+            }
+        }
+    }
+    return 0;
+} 
+
+int Debugger::start_and_debug_exe(Debugger::DebuggerData* data){ 
+    unsigned long pid = fork(); // clone/vfork/posix_spawn should be looked into : https://lwn.net/Articles/360509/
+
+    if(pid == 0){
+        // we're in the target process
+        ptrace(PTRACE_TRACEME, 0, nullptr, nullptr); // Allow the parent process to debug the child 
+        execl(data->exe_path, data->exe_path, nullptr); // Is this the right exec function we want to use? probably want the -e option (check man exec) to specify the environment we want to launch the child from.
+    }//else if(pid >= 1){
+        // the debugger process... Not sure if we have to do anything here?
+    //} // leaving this for discussion later
+    data->pid = pid;
+    if(pid == (unsigned long)getpid()){
+        printf("the pid collected is the same as the parents?? %lu, %i\n", pid, getpid());
+    }
+    // Windows has a thread id. Is that common among other operating systems?
+    // Can we specify extra --  OS-specific -- data for the debugger to display somehow?
+    data->running = true;
+    data->debugging = true;
+    return 0;
+} 
 
 unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsigned long max){
         // This might not work for all Unix machines
