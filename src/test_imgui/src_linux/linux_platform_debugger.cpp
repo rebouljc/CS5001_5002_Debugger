@@ -48,6 +48,13 @@ int Debugger::debug_loop(Debugger::DebuggerData* data){
 
     if(data->debugging){
         int wait_result = waitpid(data->pid, &wait_status, WNOHANG); 
+
+        // For some reason we don't get any wait_statuses when the child process
+        // exits. Instead we're just going to check if the waitpid returns an error code.
+        // So far this error code is ECHILD, which means that this process has no children.
+        // (i.e. the target program no longer exists). So it must have been closed.
+        // We should probably figure out how to get the WIFEXITED wait_status to show up
+        // so we can properly get the exit code from the process
         if(wait_result == -1){
             if(errno == ECHILD){
                 // There are no child processes, so the target process must have died.
