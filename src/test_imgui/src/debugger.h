@@ -23,6 +23,7 @@ namespace Debugger {
 		bool debugging = false;
 		unsigned long pid = 0;
 		unsigned long tid = 0;
+		char pdb_path[DEBUGGER_MAX_PATH];
 	};
 
 	struct Process {
