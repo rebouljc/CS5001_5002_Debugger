@@ -77,6 +77,10 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 void draw_start_window(Persistant_Vars* vars) {
 	ImGui::Begin("Start Window");
 	ImGui::InputText("Exe Path: ", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+	// TODO: PDB path is windows specific (and even debug format specific). We should]
+	// decide how to show/compile this into the program based on the current operating system.
+	// Maybe that's with a platform layer UI call?
+	ImGui::Text("PDB Path: %s", vars->debug_data.pdb_path, DEBUGGER_MAX_PATH);
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
 	}
@@ -106,7 +110,7 @@ void main_ui_loop(Persistant_Vars *vars) {
 	}
 
 	draw_start_window(vars);
-	draw_cpu_registers(vars->num_registers);
+	//draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
 	
