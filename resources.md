@@ -25,6 +25,7 @@ architecture might look like.
 **Windows specific resources**:
 * Windows documentation: <https://docs.microsoft.com/en-us/windows/win32/debug/creating-a-basic-debugger>
 * Microsoft docs for "Debug Engines" (looks like a connection to visual studio): <https://docs.microsoft.com/en-us/visualstudio/extensibility/debugger/creating-a-custom-debug-engine?view=vs-2019>
+* Information on the PDB format: <https://www.github.com/Microsoft/microsoft-pdb>
 
 **Linux specific resources**
 * Linux Blog for how to make a debugger: <https://blog.tartanllama.xyz/writing-a-linux-debugger-setup/>
