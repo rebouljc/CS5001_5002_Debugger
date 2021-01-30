@@ -1,7 +1,4 @@
 #include "main_ui.h"
-#include "imgui.h"
-//#include "debugger.h"
-
 
 void demo_code(Persistant_Vars *vars);
 
@@ -30,10 +27,12 @@ void draw_cpu_registers(int num_registers) {
 }
 
 void draw_processes(Debugger::Process* processes, unsigned long &num_processes) {
-	static ImGuiTextFilter filter("-..."); // TODO: move to PersistantVars
-	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
-	ImGui::Begin("Processes");
 
+
+	static ImGuiTextFilter filter("-..."); // TODO: move to PersistantVars.
+	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
+	ImGui::Begin("Processes"); 
+	
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.0f);
     ImGui::Text("Num Processes: %i", num_processes);
 	ImGui::SameLine();
@@ -109,6 +108,7 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
+	
 	
 
 	// Should this be here or should we call this from

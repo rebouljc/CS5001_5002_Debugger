@@ -31,6 +31,12 @@
     <ClInclude Include="imgui\backends\imgui_impl_win32.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\SourceCodeViewer.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Persistant_Vars.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp">
@@ -59,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="imgui\backends\imgui_impl_win32.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SourceCodeViewer.cpp">
+      <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
