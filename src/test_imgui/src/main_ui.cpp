@@ -13,6 +13,10 @@ void init_vars(Persistant_Vars* vars) {
 	memset(vars->processes, 0, sizeof(vars->processes));
 	vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
 	// Should change that dependency in the future
+
+	//Create SourceCodeViewerWindow Object.  Will do looping in main_ui_loop
+	vars->srcViewerWindow = new SourceCodeViewer();
+	
 }
 
 void draw_cpu_registers(int num_registers) {
@@ -108,12 +112,13 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
+	vars->srcViewerWindow->displayLoop();
 	
 	
 
 	// Should this be here or should we call this from
 	// the platform layer???
-	Debugger::debug_loop(&vars->debug_data);
+	//Debugger::debug_loop(&vars->debug_data);
 }
 
 void demo_code(Persistant_Vars *vars){

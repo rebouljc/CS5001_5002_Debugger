@@ -2,18 +2,19 @@
 
 
 #include "imgui.h"
-#include "main_ui.h"
 
 
-namespace Debugger
+
+
+class SourceCodeViewer
 {
-	class SourceCodeViewer
-	{
 	public:
 		SourceCodeViewer();
-		SourceCodeViewer(struct Persistant_Vars* var);
-		SourceCodeViewer* getClassPtr();
+		void displayLoop();
+		
 	private:
-		void drawCodeViewerWindow(struct Persistant_Vars* var);
-	};
-}
+		
+		void drawCodeViewerWindow();
+		bool openSourceFile();
+};
+
