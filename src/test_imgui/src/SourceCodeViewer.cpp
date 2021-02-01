@@ -1,12 +1,12 @@
 #include "SourceCodeViewer.h"
 #include <iostream>
-#include <windows.h>
+#include <windows.storage.pickers.h>
 
 
 
 //James C. Reboulet
 //Default Constructor
-
+using namespace ABI::Windows::Storage::Pickers;
 SourceCodeViewer::SourceCodeViewer()
 {
 	
@@ -51,6 +51,11 @@ void SourceCodeViewer::drawCodeViewerWindow()
 
 bool SourceCodeViewer::openSourceFile()
 {
+	
+	
+	HWND hwnd;
+	HRESULT result;
+
 	
 	
     

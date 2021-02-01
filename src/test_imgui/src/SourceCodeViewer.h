@@ -2,7 +2,7 @@
 
 
 #include "imgui.h"
-
+#include<shobjidl_core.h>
 
 
 
@@ -12,9 +12,10 @@ class SourceCodeViewer
 		SourceCodeViewer();
 		void displayLoop();
 		
+		
 	private:
 		
 		void drawCodeViewerWindow();
-		bool openSourceFile();
+		virtual bool openSourceFile();
 };
 
