@@ -152,6 +152,7 @@
     <ClInclude Include="imgui\imgui_internal.h" />
     <ClInclude Include="src\debugger.h" />
     <ClInclude Include="src\main_ui.h" />
+    <ClInclude Include="src\platform_ui.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\backends\imgui_impl_dx9.cpp" />

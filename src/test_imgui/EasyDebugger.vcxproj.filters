@@ -31,6 +31,9 @@
     <ClInclude Include="imgui\backends\imgui_impl_win32.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\platform_ui.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp">
