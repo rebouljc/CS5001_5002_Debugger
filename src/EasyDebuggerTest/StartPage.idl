@@ -1,9 +1,0 @@
-namespace EasyDebuggerTest
-{
-    [default_interface]
-    runtimeclass StartPage : Windows.UI.Xaml.Controls.Page
-    {
-        StartPage();
-        Int32 MyProperty;
-    }
-}
