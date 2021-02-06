@@ -3,6 +3,7 @@
 
 #include "imgui.h"
 #include<shobjidl_core.h>
+#include <string>
 
 
 
@@ -10,12 +11,19 @@ class SourceCodeViewer
 {
 	public:
 		SourceCodeViewer();
+		void setCurrentHandle(HWND& currentHandle);
+		~SourceCodeViewer();
+		
 		void displayLoop();
 		
 		
 	private:
 		
 		void drawCodeViewerWindow();
-		virtual bool openSourceFile();
+		HWND currentHandle;
+		char* openFilePath;
+		int pathSize;
+		
+		
 };
 

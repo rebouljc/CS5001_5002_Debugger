@@ -2,8 +2,8 @@
 
 namespace Debugger {
 	
-	#define DEBUGGER_MAX_PATH 260
-	#define DEBUGGER_MAX_PROCESSES 1000
+#define DEBUGGER_MAX_PATH 260
+#define DEBUGGER_MAX_PROCESSES 1000
 
 	// Should probably move the debugger init stuff
 	// into a function here

@@ -196,3 +196,4 @@ void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *dat
 	}
 
 }
+

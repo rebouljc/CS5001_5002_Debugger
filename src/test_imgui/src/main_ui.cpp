@@ -15,7 +15,7 @@ void init_vars(Persistant_Vars* vars) {
 	// Should change that dependency in the future
 
 	//Create SourceCodeViewerWindow Object.  Will do looping in main_ui_loop
-	vars->srcViewerWindow = new SourceCodeViewer();
+	vars->srcCodeViewWindow = new SourceCodeViewer();
 	
 }
 
@@ -112,7 +112,7 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
-	vars->srcViewerWindow->displayLoop();
+	vars->srcCodeViewWindow->displayLoop();
 	
 	
 

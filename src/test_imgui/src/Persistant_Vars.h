@@ -18,5 +18,5 @@
 		unsigned long num_processes;
 		Debugger::Process processes[1000];
 		Debugger::DebuggerData debug_data;
-		SourceCodeViewer* srcViewerWindow;
+		SourceCodeViewer* srcCodeViewWindow;
 	};

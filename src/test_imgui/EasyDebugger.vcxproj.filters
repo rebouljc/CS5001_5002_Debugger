@@ -37,6 +37,7 @@
     <ClInclude Include="src\Persistant_Vars.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="src_windows\OSPlatformUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp">
@@ -67,6 +68,9 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\SourceCodeViewer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src_windows\OSPlatformUI.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>
