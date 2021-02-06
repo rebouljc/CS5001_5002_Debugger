@@ -4,9 +4,6 @@ namespace Debugger {
 	#define DEBUGGER_MAX_PATH 260
 	#define DEBUGGER_MAX_PROCESSES 1000
 
-	// Should probably move the debugger init stuff
-	// into a function here
-
 	// Not actually sure how I want to go about this archiecture 
 	// We might want to have an instance of this stored
 	// on the platform layer and call to it when needed??

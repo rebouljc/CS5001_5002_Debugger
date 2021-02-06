@@ -76,12 +76,26 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 }
 
 void draw_start_window(Persistant_Vars* vars) {
-	ImGui::Begin("Start Window");
-	ImGui::InputText("", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
-	if (ImGui::Button("Open File...")) {
-		Debugger::start_and_debug_exe(&vars->debug_data);
-		OSPlatformUI::open_file(vars->debug_data.exe_path);
+
+	ImGui::Begin("Start Window", NULL, ImGuiWindowFlags_MenuBar);
+
+    ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+	if (ImGui::BeginMenuBar()) {
+        if (ImGui::BeginMenu("File"))
+        {
+			if (ImGui::MenuItem("Open File...")) {
+				OSPlatformUI::open_file(vars->debug_data.exe_path);
+			}
+            ImGui::EndMenu();
+        }
+		ImGui::EndMenuBar();
 	}
+    ImGui::PopItemWidth();
+
+	ImGui::PushItemWidth(-1);
+	ImGui::InputText("", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+	ImGui::PopItemWidth();
+
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
 	}

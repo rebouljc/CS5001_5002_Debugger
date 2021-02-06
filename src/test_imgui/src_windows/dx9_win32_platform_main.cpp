@@ -90,7 +90,6 @@ int main(int, char**)
     //IM_ASSERT(font != NULL);
 
     // Our state
-    
     Persistant_Vars vars;
     init_vars(&vars);
 
