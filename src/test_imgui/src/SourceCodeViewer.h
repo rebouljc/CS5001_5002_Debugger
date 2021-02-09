@@ -4,9 +4,10 @@
 #include "imgui.h"
 #include<shobjidl_core.h>
 #include <string>
+#include <vector>
 
 
-
+using namespace std;
 class SourceCodeViewer
 {
 	public:
@@ -23,6 +24,11 @@ class SourceCodeViewer
 		HWND currentHandle;
 		char* openFilePath;
 		int pathSize;
+		vector<vector<char>> fileContentsVector;
+		vector<char>characterVector;
+		bool fileOpenFlag = false;
+		
+		
 		
 		
 };
