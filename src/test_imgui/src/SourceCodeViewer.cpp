@@ -25,7 +25,8 @@ SourceCodeViewer::SourceCodeViewer()
 
 SourceCodeViewer::~SourceCodeViewer()
 {
-	delete [] this->openFilePath;
+	delete this->openFilePath;
+
 }
 void SourceCodeViewer::displayLoop()
 {
@@ -93,9 +94,11 @@ void SourceCodeViewer::drawCodeViewerWindow()
 							this->fileContentsVector.at(i).push_back(currentString[j]);
 						}
 					}
+					delete currentString;
 				}
 
 				ImGui::EndChild();
+				
 			}
 		}
 	     
