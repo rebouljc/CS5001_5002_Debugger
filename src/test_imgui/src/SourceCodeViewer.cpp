@@ -23,9 +23,27 @@ SourceCodeViewer::SourceCodeViewer()
 
 }
 
+void SourceCodeViewer::reinit()
+{
+	delete this->openFilePath;
+	this->fileContentsVector.clear();
+	this->characterVector.clear();
+
+	//Reallocate the char* for openfilePath on the heap.
+
+	this->openFilePath = new char[sizeof(char) * (DEBUGGER_MAX_PATH * 2)];
+	for (int i = 0; i < DEBUGGER_MAX_PATH; ++i)
+	{
+		this->openFilePath[i] = '\0';
+	}
+
+	this->pathSize = 0;
+}
+
 SourceCodeViewer::~SourceCodeViewer()
 {
 	delete this->openFilePath;
+	
 
 }
 void SourceCodeViewer::displayLoop()
@@ -109,41 +127,48 @@ void SourceCodeViewer::drawCodeViewerWindow()
 
 				if (ImGui::MenuItem("Open"))
 				{
-					
-					//Call the private OpenSourceFile method.
-					
-					
-					OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
-					printf("\n Open File Path: ");
-
-					std::string openFileResult;
-					for(int i = 0; i < this->pathSize; ++i)
+					 this->clicksonOpenButton -= 1;
+					//If a file is already open, do a reinit() of the class.
+					if (this->fileOpenFlag)
 					{
-						
-					      printf("%c", this->openFilePath[i]);
-						  openFileResult.push_back(this->openFilePath[i]);
-						 
-						
+						this->reinit();
 					}
-
-					ifstream input;
-					char currentChar;
-					input.open(this->openFilePath);
-					while (!input.eof())
+					
+					if (this->clicksonOpenButton < 0)
 					{
-						currentChar = input.get();
-						if(currentChar != '\n')
+						this->clicksonOpenButton = 0;
+						OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
+						printf("\n Open File Path: ");
+
+						std::string openFileResult;
+						for (int i = 0; i < this->pathSize; ++i)
 						{
-							this->characterVector.push_back(currentChar);
-							continue;
-						}
-						this->characterVector.push_back(currentChar);
-						this->fileContentsVector.push_back(this->characterVector);
-						this->characterVector.clear();
-					}
 
-					input.close();
-					this->fileOpenFlag = true;
+							printf("%c", this->openFilePath[i]);
+							openFileResult.push_back(this->openFilePath[i]);
+
+
+						}
+
+						ifstream input;
+						char currentChar;
+						input.open(this->openFilePath);
+						while (!input.eof())
+						{
+							currentChar = input.get();
+							if (currentChar != '\n')
+							{
+								this->characterVector.push_back(currentChar);
+								continue;
+							}
+							this->characterVector.push_back(currentChar);
+							this->fileContentsVector.push_back(this->characterVector);
+							this->characterVector.clear();
+						}
+
+						input.close();
+						this->fileOpenFlag = true;
+					}
 
 				}
 				else if (ImGui::MenuItem("Save"))
@@ -151,7 +176,8 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				}
 				else if (ImGui::MenuItem("Close"))
 				{
-
+					this->reinit();
+					this->fileOpenFlag = false;
 				}
 
 				ImGui::EndMenu();

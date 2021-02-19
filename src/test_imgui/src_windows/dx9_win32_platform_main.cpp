@@ -11,7 +11,7 @@
 // Main code
 int main(int, char**)
 {
-    ImGui_ImplWin32_EnableDpiAwareness();
+   // ImGui_ImplWin32_EnableDpiAwareness();
 
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();

@@ -12,6 +12,7 @@ class SourceCodeViewer
 {
 	public:
 		SourceCodeViewer();
+		
 		void setCurrentHandle(HWND& currentHandle);
 		~SourceCodeViewer();
 		
@@ -21,12 +22,14 @@ class SourceCodeViewer
 	private:
 		
 		void drawCodeViewerWindow();
+		void reinit();
 		HWND currentHandle;
 		char* openFilePath;
 		int pathSize;
 		vector<vector<char>> fileContentsVector;
 		vector<char>characterVector;
 		bool fileOpenFlag = false;
+		int clicksonOpenButton = 0;
 		
 		
 		
