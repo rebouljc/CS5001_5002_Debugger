@@ -7,6 +7,8 @@
 #include <vector>
 
 
+
+
 using namespace std;
 class SourceCodeViewer
 {
@@ -14,13 +16,14 @@ class SourceCodeViewer
 		SourceCodeViewer();
 		
 		void setCurrentHandle(HWND& currentHandle);
+		void setPersistantVars(struct Persistant_Vars *vars);
 		~SourceCodeViewer();
 		
 		void displayLoop();
 		
 		
 	private:
-		
+		SourceCodeViewer(int currentWindowNum);
 		void drawCodeViewerWindow();
 		void reinit();
 		HWND currentHandle;
@@ -30,6 +33,10 @@ class SourceCodeViewer
 		vector<char>characterVector;
 		bool fileOpenFlag = false;
 		int clicksonOpenButton = 0;
+		Persistant_Vars* vars;
+		int windowNum = 0;
+		string scvLabel;
+		vector<bool> checkboxCheckedVector;
 		
 		
 		

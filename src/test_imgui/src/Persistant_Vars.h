@@ -4,6 +4,7 @@
 #include "debugger.h"
 #include <stdint.h>
 #include <SourceCodeViewer.h>
+#include <vector>
 
 
 	struct Persistant_Vars {
@@ -18,5 +19,5 @@
 		unsigned long num_processes;
 		Debugger::Process processes[1000];
 		Debugger::DebuggerData debug_data;
-		SourceCodeViewer* srcCodeViewWindow;
+		vector<SourceCodeViewer*> srcCodeViewWindow;
 	};

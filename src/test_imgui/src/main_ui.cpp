@@ -15,7 +15,7 @@ void init_vars(Persistant_Vars* vars) {
 	// Should change that dependency in the future
 
 	//Create SourceCodeViewerWindow Object.  Will do looping in main_ui_loop
-	vars->srcCodeViewWindow = new SourceCodeViewer();
+	vars->srcCodeViewWindow.push_back(new SourceCodeViewer());
 	
 }
 
@@ -112,7 +112,12 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
-	vars->srcCodeViewWindow->displayLoop();
+	//Now, we can have multiple SourceCodeViewer windows open at the same time.  We just declare an object for each.
+	//We can have an option to open File in new Window.
+	for (int i = 0; i < vars->srcCodeViewWindow.size(); ++i)
+	{
+		vars->srcCodeViewWindow.at(i)->displayLoop();
+	}
 	
 	
 

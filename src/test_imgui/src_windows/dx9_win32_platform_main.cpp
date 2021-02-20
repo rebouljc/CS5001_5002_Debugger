@@ -76,7 +76,8 @@ int main(int, char**)
     // Our state
     Persistant_Vars vars;
     init_vars(&vars);
-    vars.srcCodeViewWindow->setCurrentHandle(hwnd);
+    vars.srcCodeViewWindow.at(0)->setPersistantVars(&vars);
+    vars.srcCodeViewWindow.at(0)->setCurrentHandle(hwnd);
 
    
 
