@@ -41,40 +41,43 @@ void SourceCodeViewer::openFile()
 
 
 	OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
-	printf("\n Open File Path: ");
+	
+		printf("\n Open File Path: ");
 
-	std::string openFileResult;
-	for (int i = 0; i < this->pathSize; ++i)
-	{
-
-		printf("%c", this->openFilePath[i]);
-		openFileResult.push_back(this->openFilePath[i]);
-
-
-	}
-
-	ifstream input;
-	char currentChar;
-	input.open(this->openFilePath);
-	while (!input.eof())
-	{
-		currentChar = input.get();
-		if (currentChar != '\n')
+		std::string openFileResult;
+		if (openFileResult != "") //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
 		{
-			this->characterVector.push_back(currentChar);
-			continue;
+			for (int i = 0; i < this->pathSize; ++i)
+			{
+
+				printf("%c", this->openFilePath[i]);
+				openFileResult.push_back(this->openFilePath[i]);
+
+
+			}
+
+			ifstream input;
+			char currentChar;
+			input.open(this->openFilePath);
+			while (!input.eof())
+			{
+				currentChar = input.get();
+				if (currentChar != '\n')
+				{
+					this->characterVector.push_back(currentChar);
+					continue;
+				}
+				this->characterVector.push_back(currentChar);
+				this->fileContentsVector.push_back(this->characterVector);
+				this->checkboxCheckedVector.push_back(false);
+				this->characterVector.clear();
+			}
+
+			input.close();
+			this->fileOpenFlag = true;
 		}
-		this->characterVector.push_back(currentChar);
-		this->fileContentsVector.push_back(this->characterVector);
-		this->checkboxCheckedVector.push_back(false);
-		this->characterVector.clear();
-	}
-
-	input.close();
-	this->fileOpenFlag = true;
-
-
 }
+
 
 void SourceCodeViewer::saveFile()
 {
@@ -93,15 +96,18 @@ void SourceCodeViewer::saveFile()
 	ofstream output;
 	char currentChar;
 	output.open(this->openFilePath);
-	for (int i = 0; i < this->fileContentsVector.size(); ++i)
+	if (openFileResult != "") //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
 	{
-		for (int j = 0; j < this->fileContentsVector.at(i).size(); ++j)
+		for (int i = 0; i < this->fileContentsVector.size(); ++i)
 		{
-			output.put(this->fileContentsVector.at(i).at(j));
+			for (int j = 0; j < this->fileContentsVector.at(i).size(); ++j)
+			{
+				output.put(this->fileContentsVector.at(i).at(j));
+			}
 		}
-	}
 
-	output.close();
+		output.close();
+	}
 }
 
 SourceCodeViewer::SourceCodeViewer(int currentWindowNum)
@@ -199,9 +205,6 @@ void SourceCodeViewer::drawCodeViewerWindow()
 						currentString[stIndex] = NULL;
 					}
 
-
-
-
 					for (int j = 0; j < stringSize; ++j)
 					{
 						currentString[j] = this->fileContentsVector.at(i).at(j);
@@ -220,12 +223,9 @@ void SourceCodeViewer::drawCodeViewerWindow()
 					ImGui::Checkbox(checkboxLabel.c_str(), &isChecked);
 					this->checkboxCheckedVector[i] = isChecked;
 					ImGui::SameLine();
-					ImGui::InputText(label.c_str(), currentString, (size_t)(MAX_BUFFER_SIZE));
+					ImGui::InputText(label.c_str(), currentString, (size_t)(MAX_BUFFER_SIZE), ImGuiInputTextFlags_CtrlEnterForNewLine);
 				
-					
-					
-
-
+				
 					//Now, we have to write the info from buffer back into the string.
 					this->fileContentsVector.at(i).clear();
 					for (int j = 0; j < MAX_BUFFER_SIZE; ++j)
