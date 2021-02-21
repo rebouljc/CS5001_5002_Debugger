@@ -24,8 +24,11 @@ class SourceCodeViewer
 		
 	private:
 		SourceCodeViewer(int currentWindowNum);
+		void openFile();
+		void saveFile();
 		void drawCodeViewerWindow();
 		void reinit();
+		void reinitSaveMethod();
 		HWND currentHandle;
 		char* openFilePath;
 		int pathSize;
@@ -37,7 +40,6 @@ class SourceCodeViewer
 		int windowNum = 0;
 		string scvLabel;
 		vector<bool> checkboxCheckedVector;
-		
 		
 		
 		

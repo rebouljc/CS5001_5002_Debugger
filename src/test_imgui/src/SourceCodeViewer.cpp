@@ -25,6 +25,85 @@ SourceCodeViewer::SourceCodeViewer()
 
 }
 
+SourceCodeViewer::~SourceCodeViewer()
+{
+	delete[] this->openFilePath;
+}
+
+void SourceCodeViewer::openFile()
+{
+	//If a file is already open, do a reinit() of the class.
+	if (this->fileOpenFlag)
+	{
+		this->reinit();
+		this->fileOpenFlag = false;
+	}
+
+
+	OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
+	printf("\n Open File Path: ");
+
+	std::string openFileResult;
+	for (int i = 0; i < this->pathSize; ++i)
+	{
+
+		printf("%c", this->openFilePath[i]);
+		openFileResult.push_back(this->openFilePath[i]);
+
+
+	}
+
+	ifstream input;
+	char currentChar;
+	input.open(this->openFilePath);
+	while (!input.eof())
+	{
+		currentChar = input.get();
+		if (currentChar != '\n')
+		{
+			this->characterVector.push_back(currentChar);
+			continue;
+		}
+		this->characterVector.push_back(currentChar);
+		this->fileContentsVector.push_back(this->characterVector);
+		this->checkboxCheckedVector.push_back(false);
+		this->characterVector.clear();
+	}
+
+	input.close();
+	this->fileOpenFlag = true;
+
+
+}
+
+void SourceCodeViewer::saveFile()
+{
+
+	this->reinitSaveMethod();  //We have to delete and reallocate the open file path.
+	OSPlatformUI::save_file(this->openFilePath, this->currentHandle, this->pathSize);
+	printf("\n Save File Path: ");
+
+	std::string openFileResult;
+	for (int i = 0; i < this->pathSize; ++i)
+	{
+		printf("%c", this->openFilePath[i]);
+		openFileResult.push_back(this->openFilePath[i]);
+	}
+
+	ofstream output;
+	char currentChar;
+	output.open(this->openFilePath);
+	for (int i = 0; i < this->fileContentsVector.size(); ++i)
+	{
+		for (int j = 0; j < this->fileContentsVector.at(i).size(); ++j)
+		{
+			output.put(this->fileContentsVector.at(i).at(j));
+		}
+	}
+
+	output.close();
+}
+
 SourceCodeViewer::SourceCodeViewer(int currentWindowNum)
 {
 	//We have to go through all of this, allocating the string on the heap and initializing all of its values to NULL
@@ -63,12 +142,21 @@ void SourceCodeViewer::reinit()
 	this->pathSize = 0;
 }
 
-SourceCodeViewer::~SourceCodeViewer()
+void SourceCodeViewer::reinitSaveMethod()
 {
-	delete this->openFilePath;
-	
+	delete[] this->openFilePath;
 
+	//Reallocate the char* for openfilePath on the heap.
+
+	this->openFilePath = new char[sizeof(char) * (DEBUGGER_MAX_PATH * 2)];
+	for (int i = 0; i < DEBUGGER_MAX_PATH; ++i)
+	{
+		this->openFilePath[i] = '\0';
+	}
+
+	this->pathSize = 0;
 }
+
 void SourceCodeViewer::displayLoop()
 {
 	this->drawCodeViewerWindow();
@@ -163,48 +251,7 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				if (ImGui::MenuItem("Open"))
 				{
 
-					//If a file is already open, do a reinit() of the class.
-					if (this->fileOpenFlag)
-					{
-						this->reinit();
-						this->fileOpenFlag = false;
-					}
-
-
-					OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
-					printf("\n Open File Path: ");
-
-					std::string openFileResult;
-					for (int i = 0; i < this->pathSize; ++i)
-					{
-
-						printf("%c", this->openFilePath[i]);
-						openFileResult.push_back(this->openFilePath[i]);
-
-
-					}
-
-					ifstream input;
-					char currentChar;
-					input.open(this->openFilePath);
-					while (!input.eof())
-					{
-						currentChar = input.get();
-						if (currentChar != '\n')
-						{
-							this->characterVector.push_back(currentChar);
-							continue;
-						}
-						this->characterVector.push_back(currentChar);
-						this->fileContentsVector.push_back(this->characterVector);
-						this->checkboxCheckedVector.push_back(false);
-						this->characterVector.clear();
-					}
-
-					input.close();
-					this->fileOpenFlag = true;
-
-
+					this->openFile();
 				}
 				else if (ImGui::MenuItem("Open File in New Window"))
 				{
@@ -214,6 +261,7 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				}
 				else if (ImGui::MenuItem("Save"))
 				{
+					this->saveFile();
 				}
 				else if (ImGui::MenuItem("Close"))
 				{

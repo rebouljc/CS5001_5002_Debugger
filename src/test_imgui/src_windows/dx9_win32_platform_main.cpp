@@ -133,6 +133,12 @@ int main(int, char**)
             ResetDevice();
     }
 
+    //Had to fix a little memory leak here.
+    for (int i = 0; i < vars.srcCodeViewWindow.size(); ++i)
+    {
+        delete (vars.srcCodeViewWindow.at(i));
+
+    }
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
