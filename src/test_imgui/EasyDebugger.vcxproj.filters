@@ -34,9 +34,6 @@
     <ClInclude Include="src\SourceCodeViewer.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="src\Persistant_Vars.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="src_windows\OSPlatformUI.h" />
   </ItemGroup>
   <ItemGroup>

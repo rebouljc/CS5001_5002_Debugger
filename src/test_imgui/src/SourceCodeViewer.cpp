@@ -1,10 +1,8 @@
 #include "SourceCodeViewer.h"
 #include "OSPlatformUI.h"
-
 #include "debugger.h"
 #include <string>
 #include <fstream>
-#include <Persistant_Vars.h>
 
 //James C. Reboulet
 //Default Constructor

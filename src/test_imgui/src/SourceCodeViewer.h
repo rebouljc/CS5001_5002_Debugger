@@ -1,8 +1,10 @@
 #pragma once
 
-#include "imgui.h"
 #include <string>
 #include <vector>
+
+#include "imgui.h"
+#include "main_ui.h"
 
 using namespace std;
 class SourceCodeViewer
