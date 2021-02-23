@@ -15,6 +15,7 @@
 #include <stdio.h> // printing out the errno error text 
 
 #include "debugger.h"
+#include "OSPlatformUI.h"
 
 
 void copy(void* dest, void* src, unsigned long bytes){
@@ -172,3 +173,36 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 
         return num_processes;
 }
+
+
+int OSPlatformUI::open_file(char* returned_file_path, int &pathSize) {
+    // Not sure how I feel about this function in general. But it works -Wayne
+    const char zenityP[] = "/usr/bin/zenity";
+    char call[2048];
+
+    sprintf(call, "%s  --file-selection --modal --title=\"%s\" ", zenityP, "Select file");
+
+    FILE *f = popen(call, "r");
+    fread(returned_file_path, 1, DEBUGGER_MAX_PATH, f);
+
+    // It seems that we will always get a \n at the end of the stream. Remove that here.
+    pathSize = 0;
+    while(returned_file_path[pathSize] != 0 && returned_file_path[pathSize] != '\n'){
+        pathSize++;
+    }
+    returned_file_path[pathSize] = 0;
+
+    int ret= pclose(f);
+    if(ret<0) perror("OSPlatformUI::open_file()");
+
+    return ret==0;//return true if all is OK
+}
+
+int OSPlatformUI::save_file(char* returned_file_path, int &pathSize) {
+    // This function currently does nothing!
+    printf("OSPlatformUI::save_file() is not implemented in Linux currently\n");
+    int* x = NULL;
+    *x = 0;
+    return 0;
+}
+
