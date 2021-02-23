@@ -1,23 +1,18 @@
 #include "OSPlatformUI.h"
-
 #include "main_ui.h"
+#include <Windows.h>
+#include <Psapi.h>
+#include <tchar.h>
+#include <fileapi.h> // Reading filename from a file handle
+#include <stdio.h> // temporary include
+#include <ShObjIdl_core.h>
+
 
 int OSPlatformUI::open_file(char* returned_file_path, int &pathSize) {
-	HRESULT result = BasicFileOpen(returned_file_path, pathSize);
-	return 0;
-}
-
-int OSPlatformUI::save_file(char* returned_file_path, int& pathSize) {
-	HRESULT result = BasicFileSave(returned_file_path, pathSize);
-	return 0;
-}
-
-HRESULT BasicFileOpen(char* returned_file_path, int &pathSize)
-{
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
 	if (!SUCCEEDED(hr)) {
 		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
-		return hr;
+		return 0;
 	}
 
 	// CoCreate the File Open Dialog object.
@@ -87,15 +82,14 @@ HRESULT BasicFileOpen(char* returned_file_path, int &pathSize)
 	}
 
 	CoUninitialize();
-	return hr;
+	return 0;
 }
 
-HRESULT BasicFileSave(char* returned_file_path, int& pathSize)
-{
+int OSPlatformUI::save_file(char* returned_file_path, int& pathSize) {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
 	if (!SUCCEEDED(hr)) {
-		return hr;
 		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
+		return 0;
 	}
 
 	// CoCreate the File Open Dialog object.
@@ -166,7 +160,7 @@ HRESULT BasicFileSave(char* returned_file_path, int& pathSize)
 	}
 
 	CoUninitialize();
-	return hr;
+	return 0;
 }
 
 

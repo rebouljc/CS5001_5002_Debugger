@@ -152,6 +152,7 @@
     <ClInclude Include="imgui\imgui_internal.h" />
     <ClInclude Include="src\debugger.h" />
     <ClInclude Include="src\main_ui.h" />
+    <ClInclude Include="src\OSPlatformUI.h" />
     <ClInclude Include="src\SourceCodeViewer.h" />
     <ClInclude Include="src_windows\OSPlatformUI.h" />
   </ItemGroup>
