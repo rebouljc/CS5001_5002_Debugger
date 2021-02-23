@@ -2,25 +2,30 @@
 
 #include "main_ui.h"
 
-int OSPlatformUI::open_file(char* returned_file_path, HWND &currentHandle, int &pathSize) {
-	HRESULT result = BasicFileOpen(returned_file_path, currentHandle, pathSize);
+int OSPlatformUI::open_file(char* returned_file_path, int &pathSize) {
+	HRESULT result = BasicFileOpen(returned_file_path, pathSize);
 	return 0;
 }
 
-int OSPlatformUI::save_file(char* returned_file_path, HWND& currentHandle, int& pathSize) {
-	HRESULT result = BasicFileSave(returned_file_path, currentHandle, pathSize);
+int OSPlatformUI::save_file(char* returned_file_path, int& pathSize) {
+	HRESULT result = BasicFileSave(returned_file_path, pathSize);
 	return 0;
 }
 
-HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSize)
+HRESULT BasicFileOpen(char* returned_file_path, int &pathSize)
 {
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
+	if (!SUCCEEDED(hr)) {
+		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
+		return hr;
+	}
+
 	// CoCreate the File Open Dialog object.
 	IFileDialog* pfd = NULL;
-	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
-		                          NULL,
-		                          CLSCTX_INPROC_SERVER,
-		                          IID_PPV_ARGS(&pfd)
-	                             );
+	hr = CoCreateInstance(CLSID_FileOpenDialog, 
+                          NULL,
+		                  CLSCTX_INPROC_SERVER, 
+		                  IID_PPV_ARGS(&pfd));
 	if (SUCCEEDED(hr))
 	{
 		DWORD dwFlags;
@@ -29,7 +34,7 @@ HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSi
 		if (SUCCEEDED(hr))
 		{
 			// Show the dialog
-			hr = pfd->Show(currentHandle);
+			hr = pfd->Show(NULL);
 			if (SUCCEEDED(hr))
 			{
 				// Obtain the result once the user clicks 
@@ -40,8 +45,6 @@ HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSi
 				hr = pfd->GetResult(&psiResult);
 				if (SUCCEEDED(hr))
 				{
-					// We are just going to print out the 
-					// name of the file for sample sake.
 					PWSTR pszFilePath = NULL;
 					hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
@@ -59,6 +62,9 @@ HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSi
 						i++;
 					}
 					pathSize = strlen(returned_file_path);
+					if (SUCCEEDED(hr)) {
+						CoTaskMemFree(pszFilePath);
+					}
 
 					/*
 					if (SUCCEEDED(hr))
@@ -71,7 +77,6 @@ HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSi
 							TDCBF_OK_BUTTON,
 							TD_INFORMATION_ICON,
 							NULL);
-						CoTaskMemFree(pszFilePath);
 					}
 					*/
 					psiResult->Release();
@@ -81,15 +86,21 @@ HRESULT BasicFileOpen(char* returned_file_path, HWND &currentHandle, int &pathSi
 		pfd->Release();
 	}
 
-
+	CoUninitialize();
 	return hr;
 }
 
-HRESULT BasicFileSave(char* returned_file_path, HWND& currentHandle, int& pathSize)
+HRESULT BasicFileSave(char* returned_file_path, int& pathSize)
 {
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
+	if (!SUCCEEDED(hr)) {
+		return hr;
+		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
+	}
+
 	// CoCreate the File Open Dialog object.
 	IFileDialog* pfd = NULL;
-	HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog,
+	hr = CoCreateInstance(CLSID_FileSaveDialog,
 		NULL,
 		CLSCTX_INPROC_SERVER,
 		IID_PPV_ARGS(&pfd)
@@ -102,7 +113,7 @@ HRESULT BasicFileSave(char* returned_file_path, HWND& currentHandle, int& pathSi
 		if (SUCCEEDED(hr))
 		{
 			// Show the dialog
-			hr = pfd->Show(currentHandle);
+			hr = pfd->Show(NULL);
 			if (SUCCEEDED(hr))
 			{
 				// Obtain the result once the user clicks 
@@ -154,7 +165,7 @@ HRESULT BasicFileSave(char* returned_file_path, HWND& currentHandle, int& pathSi
 		pfd->Release();
 	}
 
-
+	CoUninitialize();
 	return hr;
 }
 

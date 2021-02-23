@@ -15,7 +15,6 @@ class SourceCodeViewer
 	public:
 		SourceCodeViewer();
 		
-		void setCurrentHandle(HWND& currentHandle);
 		void setPersistantVars(struct Persistant_Vars *vars);
 		~SourceCodeViewer();
 		
@@ -29,7 +28,6 @@ class SourceCodeViewer
 		void drawCodeViewerWindow();
 		void reinit();
 		void reinitSaveMethod();
-		HWND currentHandle;
 		char* openFilePath;
 		int pathSize;
 		vector<vector<char>> fileContentsVector;
@@ -40,8 +38,6 @@ class SourceCodeViewer
 		int windowNum = 0;
 		string scvLabel;
 		vector<bool> checkboxCheckedVector;
-		
-		
 		
 };
 

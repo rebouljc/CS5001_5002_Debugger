@@ -40,7 +40,7 @@ void SourceCodeViewer::openFile()
 	}
 
 
-	OSPlatformUI::open_file(this->openFilePath, this->currentHandle, this->pathSize);
+	OSPlatformUI::open_file(this->openFilePath, this->pathSize);
 	
 		printf("\n Open File Path: ");
 
@@ -83,7 +83,7 @@ void SourceCodeViewer::saveFile()
 {
 
 	this->reinitSaveMethod();  //We have to delete and reallocate the open file path.
-	OSPlatformUI::save_file(this->openFilePath, this->currentHandle, this->pathSize);
+	OSPlatformUI::save_file(this->openFilePath, this->pathSize);
 	printf("\n Save File Path: ");
 
 	std::string openFileResult;
@@ -166,11 +166,6 @@ void SourceCodeViewer::reinitSaveMethod()
 void SourceCodeViewer::displayLoop()
 {
 	this->drawCodeViewerWindow();
-}
-
-void SourceCodeViewer::setCurrentHandle(HWND& currentHandle)
-{
-	this->currentHandle = currentHandle;
 }
 
 void SourceCodeViewer::drawCodeViewerWindow()
@@ -257,7 +252,6 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				{
 					this->vars->srcCodeViewWindow.push_back(new SourceCodeViewer(this->windowNum));
 					vars->srcCodeViewWindow.at(0)->setPersistantVars(vars);
-					vars->srcCodeViewWindow.at(0)->setCurrentHandle(this->currentHandle);
 				}
 				else if (ImGui::MenuItem("Save"))
 				{
