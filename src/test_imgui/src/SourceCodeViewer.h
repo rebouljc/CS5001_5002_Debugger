@@ -1,13 +1,8 @@
 #pragma once
 
-
 #include "imgui.h"
-#include<shobjidl_core.h>
 #include <string>
 #include <vector>
-
-
-
 
 using namespace std;
 class SourceCodeViewer

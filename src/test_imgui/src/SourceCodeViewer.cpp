@@ -1,5 +1,4 @@
 #include "SourceCodeViewer.h"
-#include <windows.storage.pickers.h>
 #include "OSPlatformUI.h"
 
 #include "debugger.h"
