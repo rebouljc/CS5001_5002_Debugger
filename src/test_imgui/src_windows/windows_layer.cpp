@@ -20,6 +20,11 @@ void* OSLayer::allocate_memory(unsigned long long size_bytes) {
 	return memory;
 }
 
+bool OSLayer::free_memory(void* memory) {
+	HANDLE heap = GetProcessHeap();
+	return HeapFree(heap, NULL, memory);
+}
+
 HRESULT BasicFileOpen(char* returned_file_path)
 {
 	// CoCreate the File Open Dialog object.

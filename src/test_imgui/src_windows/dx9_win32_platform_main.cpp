@@ -13,6 +13,7 @@
 #include <stdio.h>
 
 #include "main_ui.h"
+#include <os_layer.h>
 
 // Data
 static LPDIRECT3D9              g_pD3D = NULL;
@@ -94,7 +95,7 @@ struct MSF {
     unsigned int root_page_number;
 };
 
-struct GUID {
+struct MyGUID {
     unsigned char signature[4];
     unsigned long guid1;
     unsigned short guid2;
@@ -102,20 +103,90 @@ struct GUID {
     unsigned char guid4[8];
 };
 
+struct CVLine {
+    unsigned long offset;
+    unsigned long linenum_start : 24;
+    unsigned long deltaLineEnd: 7;
+    unsigned long fStatement: 1; // true if statement, false if expression
+};
+
 struct PDBStream {
     unsigned int version;
     unsigned int signature;
     unsigned int age;
-    union {
-        GUID guid;
-        struct {
-            unsigned char signature[4];
-            unsigned long guid1;
-            unsigned short guid2;
-            unsigned short guid3;
-            unsigned char guid4[8];
-        };
-    };
+	unsigned long guid1;
+	unsigned short guid2;
+	unsigned short guid3;
+	unsigned char guid4[8];
+};
+
+enum PdbRaw_FeatureSig {
+    VC110 = 20091201,
+    VC140 = 20140508,
+    NoTypeMerge = 0x4D544F4E,     // NOTM
+    MinimalDebugInfo = 0x494E494D // MINI
+};
+
+struct ModInfo {
+    unsigned int unused1;
+    struct {
+        unsigned short section;
+        char padding1[2];
+        int offset;
+        int size;
+        unsigned int characteristics;
+        unsigned short module_index;
+        char padding2[2];
+        unsigned int data_crc;
+        unsigned int reloc_crc;
+    } SectionContribEntry;
+    struct {
+        unsigned short dirty : 1;
+        unsigned short EC : 1;
+        unsigned short unused : 6;
+        unsigned short TSM : 8;
+    } flags;
+    unsigned short module_sym_stream;
+    unsigned int sym_byte_size;
+    unsigned int c11_byte_size;
+    unsigned int c13_byte_size;
+    unsigned short source_file_count;
+    char padding[2];
+    unsigned int unused2;
+    unsigned int source_file_name_index;
+    unsigned int pdb_file_path_name_index;;
+};
+
+struct DbiStreamHeader {
+    int version_signature;
+    unsigned int version_header;
+    unsigned int age;
+    unsigned short global_stream_index;
+    struct _build_number {
+        unsigned short minor_version : 8;
+        unsigned short major_version: 7;
+        unsigned short new_version_format: 1;
+    } build_number;
+    unsigned short public_stream_index;
+    unsigned short pdb_dll_vesrion;
+    unsigned short sym_record_stream;
+    unsigned short pdb_dll_rbdl;
+    int mod_info_size;
+    int section_contribution_size;
+    int section_map_size;
+    int source_info_size;
+    int type_server_map_size;
+    unsigned int MFC_type_server_index;
+    int optional_dbg_header_size;
+    int EC_substream_size;
+    struct _flags {
+		unsigned short was_inc_linked:1;
+		unsigned short private_symb_stripped:1;
+		unsigned short has_conflicting_types:1;
+		unsigned short reserved:13;
+    } flags;
+    unsigned short machine;
+    unsigned int padding;
 };
 
 void get_pdb_file_path_test(char* exe_path, char* output_path) {
@@ -213,16 +284,13 @@ void get_pdb_file_path_test(char* exe_path, char* output_path) {
     unsigned long current_start = 0;
     unsigned long size = 2048;
 
-    while (debug_dir_file_offset >= (current_start + size)) {
-		success = ReadFile(file_handle, buffer, 2048, &bytes_read, NULL);
-        if (!success) {
-            printf("Reached end of file?\n");
-            return;
-        }
-        current_start += bytes_read;
-    }
-
-    DEBUG_DIR another_debug_dir = *(DEBUG_DIR*)(buffer+(debug_dir_file_offset-current_start));
+    SetFilePointer(file_handle, debug_dir_file_offset, NULL, FILE_BEGIN);
+	success = ReadFile(file_handle, buffer, 2048, &bytes_read, NULL);
+	if (!success) {
+		printf("Reached end of file?\n");
+		return;
+	}
+    DEBUG_DIR another_debug_dir = *(DEBUG_DIR*)(buffer);
     
     if (another_debug_dir.type == 2) {
         printf("Debug data is Visual C++ debug information\n");
@@ -230,28 +298,34 @@ void get_pdb_file_path_test(char* exe_path, char* output_path) {
     }
 
 
-    while (another_debug_dir.pointer_to_raw_data >= (current_start + size)) {
-		success = ReadFile(file_handle, buffer, 2048, &bytes_read, NULL);
-        if (!success) {
-            printf("Reached end of file?\n");
-            return;
-        }
-        current_start += bytes_read;
-    }
+    SetFilePointer(file_handle, another_debug_dir.pointer_to_raw_data, NULL, FILE_BEGIN);
+	success = ReadFile(file_handle, buffer, 2048, &bytes_read, NULL);
+	if (!success) {
+		printf("Reached end of file?\n");
+		return;
+	}
 
-    unsigned long code_view_offset = + another_debug_dir.pointer_to_raw_data - current_start;
-    CODEVIEW codeview = *(CODEVIEW*)(buffer +code_view_offset);
+    CODEVIEW codeview = *(CODEVIEW*)(buffer);
     printf("\tcodeview header:\n");
     printf("\t\tSignature: ");
     for (int i = 0; i < 4; i++) {
         printf("%c", codeview.signature[i]);
     }
-    printf("\n\t\tGUID: %#04X-%#02X-%#02X-%#08X\n", codeview.guid1, codeview.guid2, codeview.guid3, codeview.guid4);
+
+    printf("\n\t\tGUID: ");
+    printf("%#04x - ", codeview.guid1);
+    printf("%#02x - ", codeview.guid2);
+    printf("%#02x - ", codeview.guid3);
+    for (int i = 0; i < 8; i++) {
+        printf(" %#01x ", codeview.guid4[i]);
+    }
+    printf("\n");
+
     printf("\t\tage: %i\n",codeview.age);
 
-    printf("\t\tFile Path: %s\n", (buffer+code_view_offset+sizeof(codeview)));
+    printf("\t\tFile Path: %s\n", (buffer+sizeof(codeview)));
 
-	char* pdb_file_path = (buffer + code_view_offset + sizeof(codeview));
+	char* pdb_file_path = (buffer + sizeof(codeview));
 
 	int i = 0;
 	while (i < DEBUGGER_MAX_PATH && pdb_file_path[i] != 0) {
@@ -334,8 +408,11 @@ void parse_pdb_file(char* pdb_file_path) {
     unsigned int stream_block_size = 0;
     unsigned int total_blocks = 0;
     unsigned int block;
+    
 
     unsigned int pdb_header_block = 0;
+    unsigned int pdb_stream_size = 0;
+
     for (int i = 0; i < num_streams; i++) {
         current_stream_size = *(unsigned int*)(buffer + ((i + 1) * 4));
         stream_block_size = ((current_stream_size+pdb_header.page_size-1)/pdb_header.page_size);
@@ -346,6 +423,7 @@ void parse_pdb_file(char* pdb_file_path) {
             block = *(unsigned int*)(buffer+(num_streams*4)+((b+1)*4));
             if (i == 0) {
                 pdb_header_block = block;
+				pdb_stream_size = current_stream_size;
             }
             printf("%i, ", block);
         }
@@ -356,40 +434,390 @@ void parse_pdb_file(char* pdb_file_path) {
     printf("\ttotal counted blocks: %i\n", total_blocks);
     printf("\n");
 
-    printf("\tNow reading the PDB stream\n");
+    printf("\tNow reading the PDB stream from block %i\n", pdb_header_block);
 
 	// Go to the pdb stream 
-    SetFilePointer(file_handle, pdb_header_block*pdb_header.page_size, NULL, 0 );
+    unsigned long ret = SetFilePointer(file_handle, (pdb_header_block-1)*pdb_header.page_size, NULL, FILE_BEGIN);
     success = ReadFile(file_handle, buffer, BUFFER_SIZE, &bytes_read, NULL);
 
+    printf("\t\tPDB Stream size: %i\n", pdb_stream_size);
     PDBStream s = *(PDBStream*)(buffer);
 
     if (s.version == 20000404) {
         printf("\t\tGot VC70\n");
     }
     else {
-        printf("\t\tGot a different version number!!!\n");
+        printf("\t\tGot a different version number!!!: %i\n", s.version);
     }
 
-    printf("\t\tGUID: %#04X-%#02X-%#02X-%#08X\n", s.guid1, s.guid2, s.guid3, s.guid4);
+    // We can use the pdb GUID and compare it to the exe GUID to make sure they are matching
+    printf("\n\t\tGUID: ");
+    printf("%#04x - ", s.guid1);
+    printf("%#02x - ", s.guid2);
+    printf("%#02x - ", s.guid3);
+    for (int i = 0; i < 8; i++) {
+        printf(" %#01x ", s.guid4[i]);
+    }
+    printf("\n");
 
 
+    unsigned long nsm_offset = sizeof(PDBStream);
+    printf("\tReading the Named Stream Map\n");
+    unsigned int named_stream_map_size = *(unsigned int*)(buffer+nsm_offset);
+    unsigned long count = 0;
+    // Count the number of entries in the has table
+    for (int i = nsm_offset+4; i <= nsm_offset + 4+ named_stream_map_size; i++) {
+        if (buffer[i] == 0) {
+            count++;
+        }
+    }
+
+    unsigned int table_offset = nsm_offset + 4 + named_stream_map_size;
+
+    unsigned int table_size         = *(unsigned int*)(buffer + table_offset);
+    unsigned int table_capacity     = *(unsigned int*)(buffer + table_offset+4);
+    unsigned long long present_bit_vector = *(unsigned long long*)(buffer + table_offset+8) & 0xFFFFFFFFFFFF;
+    unsigned long long deleted_bit_vector = *(unsigned long long*)(buffer + table_offset+14) & 0xFFFFFFFFFFFF;
+
+    unsigned int table_items_offset = table_offset + 20;
+
+    printf("\tsize: %i\n", table_size);
+    printf("\tcapacity: %i\n", table_capacity);
+    // TODO: I'm not sure how to actually read in the present and deleted bit vectors
+    // they should tell us which indexes in the hash table can be read. But instead we're just going
+    // to assume that they are in sequential order (which will probably bite us back later
+    printf("\tpresent: %I64u\n", present_bit_vector);
+    printf("\tdeleted: %I64u\n", deleted_bit_vector);
+
+    printf("\tvalues:\n");
+    for (int i = 0; i < table_size; i++) {
+        unsigned int key = *(unsigned int*)(buffer+table_items_offset+i*8);
+        unsigned int value = *(unsigned int*)(buffer+table_items_offset+i*8+4);
+        if (key < BUFFER_SIZE) {
+			printf("\t\tkey: %i\tvalue: %i\tstring:%s\n", key, value, buffer+nsm_offset+4+key);
+        }
+        else {
+			printf("\t\tkey: %i\tvalue: %i\n", key, value);
+        }
+    }
+
+    unsigned int feature_sig_offset = table_items_offset+table_size*8;
+    // TODO: How do I know where to start and when to stop reading the list?
+    // llvm says that the enums fill the rest of the PDB Stream size, but the size is about 2k,
+    // even though the PDB Stream stops giving relevant information after many less bytes
+    for (int i = 0; i < 10; i+=1) {
+        unsigned int feature_sig = *(unsigned int*)(buffer+feature_sig_offset+(i*4));
+        if (feature_sig == 0) {
+            continue;
+        }
+
+        printf("\tfeature: ");
+        if (feature_sig == VC110) {
+            printf("VC100");
+        } else if (feature_sig == VC140) {
+            printf("VC140");
+        } else if (feature_sig == NoTypeMerge) {
+            printf("NoTypeMerge");
+        } else if (feature_sig == MinimalDebugInfo) {
+            printf("MinimalDebugInfo");
+        }
+        printf("\n");
+    }
+	printf("\n");
+
+
+    // Iterate through and print out the values for the hash table
+    /*
+    for (int i = 0; i < table_size; i++) {
+
+        unsigned int key = *(unsigned int*)(buffer + (i*4));
+        unsigned int value_page = *(unsigned int*)(buffer + i + 1);
+        printf("%s is in page %i\n", buffer+key, value_page);
+    }
+    */
+
+    printf("\n");
 
 
     CloseHandle(file_handle);
     printf("Closed pdb file\n");
 }
 
+
+struct StreamBlockInfo {
+    unsigned int byte_offset_to_blocks;
+    unsigned int num_bytes;
+    unsigned int num_blocks;
+};
+
+
+void parse_pdb_file_2(char* pdb_file_path) {
+    const unsigned long BUFFER_SIZE = 4096;
+	WCHAR exe_wide[DEBUGGER_MAX_PATH];
+	for (int i = 0; i < DEBUGGER_MAX_PATH; i++) {
+		exe_wide[i] = (WCHAR)pdb_file_path[i];
+	}
+
+    HANDLE file_handle;
+    file_handle = CreateFile(
+        exe_wide,
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL 
+    );    
+
+    unsigned long file_size;
+    unsigned long high_part;
+    file_size = GetFileSize(file_handle, &high_part);
+    printf("\n");
+    printf("Opened pdb file of size %i\n", file_size);
+
+    char buffer[BUFFER_SIZE];
+    unsigned long bytes_read = 0;
+
+    bool success = ReadFile(file_handle, buffer, BUFFER_SIZE, &bytes_read, NULL);
+
+    // Check the for the PDB version 7 signature. Otherwise, it's probably
+    // a PDB version 2 (or not a PDB file).
+    char signature[] = "Microsoft C/C++ MSF 7.00\r\nPDS\0\0\0";
+    signature[26] = '\x1A';
+    bool version7 = true;
+    for (int i = 0; i < 32; i++) {
+        if (buffer[i] != signature[i]) {
+            version7 = false;
+            printf("PDB did not match version 7 signature\n");
+		    break;
+        }
+    }
+
+    if (version7) {
+        printf("PDB matched version 7 signature\n");
+    }
+
+    MSF pdb_header = *(MSF*)(buffer+32);
+
+
+    printf("\tpage_size: %i\n", pdb_header.page_size);
+    printf("\tfree_block_map: %i\n", pdb_header.free_block_map);
+    printf("\tnumber_of_pages: %i\n", pdb_header.number_of_pages);
+    printf("\troot_stream_size: %i\n", pdb_header.root_stream_size);
+    printf("\treserved: %i\n", pdb_header.reserved);
+    printf("\troot_page_number: %i\n", pdb_header.root_page_number);
+    printf("\tfile size should be: %i\n", pdb_header.page_size*pdb_header.number_of_pages);
+
+    // Jump to the root stream
+    SetFilePointer(file_handle, (pdb_header.root_page_number-1)*pdb_header.page_size, NULL, FILE_BEGIN);
+	success = ReadFile(file_handle, buffer, BUFFER_SIZE, &bytes_read, NULL);
+
+    // Should be at the root stream now:
+    unsigned int num_streams = *(unsigned int*)(buffer);
+    printf("\tnumber of streams: %i\n", num_streams);
+
+    StreamBlockInfo *stream_block_info = (StreamBlockInfo*)OSLayer::allocate_memory(sizeof(StreamBlockInfo)*num_streams);
+    
+    unsigned int current_stream_size = 0;
+    unsigned int stream_block_size = 0;
+    unsigned int total_blocks = 0;
+    unsigned int block;
+    
+
+    unsigned int pdb_header_block = 0;
+    unsigned int pdb_stream_size = 0;
+
+    char* stream_buffer = NULL; 
+
+    unsigned int bytes_copied = 0;
+
+    for (int i = 0; i < num_streams; i++) {
+        current_stream_size = *(unsigned int*)(buffer + ((i + 1) * 4));
+        stream_block_size = ((current_stream_size+pdb_header.page_size-1)/pdb_header.page_size);
+        printf("\t\tStream size %i: %i", i, current_stream_size);
+        printf("\t\t\tblocks: %i\n", stream_block_size);
+        printf("\t\t\tblocks: {");
+
+        stream_block_info[i].byte_offset_to_blocks = (num_streams * 4) + ((total_blocks + 1) * 4);
+        stream_block_info[i].num_bytes = current_stream_size;
+        stream_block_info[i].num_blocks = stream_block_size;
+
+	   // TODO create a custom memory allocation system that is OS independent.
+        if (i == 3) {
+            stream_buffer = (char*)VirtualAlloc(NULL, current_stream_size, MEM_COMMIT, PAGE_READWRITE);
+        }
+		for (int b = total_blocks; b < total_blocks + stream_block_size; b++) {
+			block = *(unsigned int*)(buffer+(num_streams*4)+((b+1)*4));
+
+			if (i == 3) {
+				SetFilePointer(file_handle, block*pdb_header.page_size, NULL, FILE_BEGIN);
+				success = ReadFile(file_handle, (char*)stream_buffer+bytes_copied, pdb_header.page_size, &bytes_read, NULL);
+				printf("Copied block %i into the stream buffer at byte %i \n", block, bytes_copied);
+				bytes_copied += bytes_read;
+			}
+			
+			if (i == 0) {
+				pdb_header_block = block;
+				pdb_stream_size = current_stream_size;
+			}
+
+			printf("%i, ", block);
+		}
+
+        printf("}\n");
+        total_blocks += stream_block_size;
+    }
+
+
+    // Parse the DBI Stream block;
+    DbiStreamHeader dbi_stream_header = *(DbiStreamHeader*)(stream_buffer);
+    printf("\n");
+    printf("VersionSignature: %i\n", dbi_stream_header.version_signature);
+    printf("VersionHeader: %i\n", dbi_stream_header.version_header);
+    printf("Age: %i\n", dbi_stream_header.age);
+    printf("Int size: %i\n", sizeof(dbi_stream_header.version_signature));
+    printf("Global Stream Index: %d\n", dbi_stream_header.global_stream_index);
+    printf("BuildNumber: %d\n", dbi_stream_header.build_number);
+    printf("\n");
+
+
+    unsigned int mod_info_offset = sizeof(DbiStreamHeader);
+    unsigned long long num_source_files = 0;
+    printf("Parsing ModInfo\n");
+    char* module_buffer = (char*)OSLayer::allocate_memory(20000);
+    unsigned long max_size = 20000;
+    while (mod_info_offset < sizeof(DbiStreamHeader) + dbi_stream_header.mod_info_size) {
+		ModInfo mod_info = *(ModInfo*)(stream_buffer+mod_info_offset);
+        if (mod_info.module_sym_stream != 0xFFFF) {
+            StreamBlockInfo blocks_info = stream_block_info[mod_info.module_sym_stream];
+
+            // Make sure we have enough memory to store all the blocks
+            if (blocks_info.num_blocks * pdb_header.page_size > max_size) {
+                OSLayer::free_memory((void*)module_buffer);
+                max_size = blocks_info.num_blocks * pdb_header.page_size;
+                module_buffer = (char*)OSLayer::allocate_memory(max_size);
+            }
+
+            // Clear the blocks
+            for (int i = 0; i < max_size; i++) {
+                module_buffer[i] = 0xcc;
+            }
+
+            // Copy the blocks to the module_buffer
+            for (int i = 0; i < blocks_info.num_blocks; i++) {
+                unsigned int block = *(unsigned int*)(buffer + blocks_info.byte_offset_to_blocks + (i * 4));
+                SetFilePointer(file_handle, block * pdb_header.page_size, NULL, FILE_BEGIN);
+                success = ReadFile(file_handle, (char*)module_buffer + i * pdb_header.page_size, pdb_header.page_size, &bytes_read, NULL);
+                assert(success);
+            }
+
+            // Parse C13 line information 
+			unsigned int line_information_offset = mod_info.sym_byte_size;
+            unsigned int checksum_offset = 0;
+            unsigned int name_offset = 0;
+            while (line_information_offset - mod_info.sym_byte_size < mod_info.c13_byte_size) {
+                unsigned int info_type = *(unsigned int*)(module_buffer + line_information_offset);
+                unsigned int size = *(unsigned int*)(module_buffer + line_information_offset + 4);
+                if (info_type != 0xf2) { // DEBUG_S_LINES
+                    if (info_type == 0xf4) {
+                        checksum_offset = line_information_offset;
+                    }
+                }
+                else {
+					unsigned int base_address = *(unsigned int*)(module_buffer + line_information_offset + 8);
+					unsigned short section_number = *(unsigned short*)(module_buffer + line_information_offset + 12);
+					unsigned short flags = *(unsigned short*)(module_buffer + line_information_offset + 14);
+                    if (flags & 0x0001) {
+                        printf("Line numbers have column data\n");
+                    }
+					unsigned int range = *(unsigned int*)(module_buffer + line_information_offset + 16);
+					unsigned int offset_file = *(unsigned int*)(module_buffer + line_information_offset + 20);
+                    name_offset = checksum_offset + offset_file + 8;
+					unsigned int num_pairs = *(unsigned int*)(module_buffer + line_information_offset + 24);
+					unsigned int bytes_of_code = *(unsigned int*)(module_buffer + line_information_offset + 28);
+                    for (int i = 0; i < num_pairs; i++) {
+                        CVLine line_info = *(CVLine*)(module_buffer + line_information_offset + 32 + 8 * i);
+						//printf("%i, %#08x\n", line_info.linenum_start, base_address+line_info.offset);
+                    }
+                }
+				line_information_offset += size+8;
+            }
+
+        }
+
+		mod_info_offset += sizeof(ModInfo);
+		printf("\t\t\t\t\tIndex: %i\n", mod_info.SectionContribEntry.module_index);
+		// It's possible that the next 16 bits are 0, and the Module Name starts right after that...
+		if (*(unsigned short*)(stream_buffer + mod_info_offset) == 0) {
+			mod_info_offset += 2;
+		}
+		num_source_files += mod_info.source_file_count;
+		// Find next string
+		printf("Module Name: %s\n", stream_buffer + mod_info_offset);
+		if (stream_buffer[mod_info_offset] == 0) {
+			mod_info_offset++;
+		}
+		while (stream_buffer[mod_info_offset] != 0) {
+			mod_info_offset++;
+		}
+		mod_info_offset++;
+		printf("ObjFileName: %s\n", stream_buffer + mod_info_offset);
+		if (stream_buffer[mod_info_offset] == 0) {
+			mod_info_offset++;
+		}
+		// Go to the next ModInfo offset 
+		while (stream_buffer[mod_info_offset] != 0) {
+			mod_info_offset++;
+		}
+		mod_info_offset++;
+		// Align forward to a 4 byte alignment
+		mod_info_offset = (mod_info_offset + 4 - 1) & ~(4 - 1);
+		printf("\n\n");
+    }
+
+    printf("\n");
+    printf("Parse File Info Substream:\n");
+    unsigned int file_info_offset = dbi_stream_header.mod_info_size 
+        + dbi_stream_header.section_contribution_size 
+        + dbi_stream_header.section_map_size
+        + sizeof(dbi_stream_header);
+    unsigned short num_modules = *(unsigned short*)(stream_buffer + file_info_offset);
+    printf("Number of modules: %i\n", num_modules);
+    printf("Number of source files: %i\n", num_source_files);
+    printf("Module Indicies = {");
+	for (int i = 0; i < num_modules; i++) {
+        printf("%i, ", *(unsigned short*)(stream_buffer + file_info_offset + 4 + (i * 2)));
+    }
+	printf("}\n");
+    unsigned int num_source_files_2 = 0;
+    unsigned int source_count_offset = file_info_offset + 4 + (num_modules*2);
+    unsigned int file_names_offset = file_info_offset + 4 + 2*(num_modules*2);
+    unsigned int names_buffer_offset = file_names_offset+num_source_files*4;
+    for (int i = 0; i < num_modules; i++) {
+        unsigned short this_mod_src_count = *(unsigned short*)(stream_buffer + source_count_offset + (i * 2));
+        num_source_files_2 += this_mod_src_count;
+        printf("Mod %i has file count %i\n", i, this_mod_src_count);
+    }
+    printf("New source file count: %i\n", num_source_files_2);
+    for (int i = 0; i < num_source_files; i++) { 
+        unsigned int file_name_offset = *(unsigned int*)(stream_buffer + file_names_offset + (i * 4));
+        printf("Source file name: %i, %i, %s\n", file_name_offset, i, stream_buffer+names_buffer_offset+file_name_offset);
+    }
+    printf("\n");
+
+}
+
 // Main code
 int main(int, char**)
 {
-    char exe_path[] = "D:\\Projects\\CS5001_5002_Debugger\\src\\test_imgui\\x64\\DebugCopy\\EasyDebugger.exe";
+    char exe_path[] = "D:\\Projects\\CS5001_5002_Debugger\\src\\test_imgui\\x64\\Debug\\EasyDebugger.exe";
     char output_path[DEBUGGER_MAX_PATH] = {0};
     get_pdb_file_path_test(exe_path, output_path);
 
     printf("\n\nPDB path: %s\n", output_path);
 
-    parse_pdb_file(output_path);
+    //parse_pdb_file(output_path);
+    parse_pdb_file_2(output_path);
 
     return 0;
 
