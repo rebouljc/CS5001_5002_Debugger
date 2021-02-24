@@ -35,6 +35,6 @@ class SourceCodeViewer
 		int windowNum = 0;
 		string scvLabel;
 		vector<bool> checkboxCheckedVector;
-		
+		std::string openFileResult;
 };
 

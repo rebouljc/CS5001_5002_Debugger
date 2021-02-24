@@ -30,7 +30,16 @@ SourceCodeViewer::~SourceCodeViewer()
 void SourceCodeViewer::openFile()
 {
 	//If a file is already open, do a reinit() of the class.
+	
 	if (this->fileOpenFlag)
+	{
+		
+		this->reinitSaveMethod();
+		this->fileOpenFlag = false;
+		
+	}
+
+	else if (!this->fileOpenFlag)
 	{
 		this->reinit();
 		this->fileOpenFlag = false;
@@ -41,14 +50,25 @@ void SourceCodeViewer::openFile()
 	
 		printf("\n Open File Path: ");
 
-		std::string openFileResult;
-		if (openFileResult != "") //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
+
+		if (this->openFilePath[0] != NULL && this->fileOpenFlag)
 		{
+			this->reinit();
+			this->fileOpenFlag = false;
+		}
+
+		
+		if (this->openFilePath[0] != NULL) //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
+		{
+			this->fileContentsVector.clear();
+			this->checkboxCheckedVector.clear();
+			this->characterVector.clear();
+
 			for (int i = 0; i < this->pathSize; ++i)
 			{
 
 				printf("%c", this->openFilePath[i]);
-				openFileResult.push_back(this->openFilePath[i]);
+				this->openFileResult.push_back(this->openFilePath[i]);
 
 
 			}
@@ -72,7 +92,11 @@ void SourceCodeViewer::openFile()
 
 			input.close();
 			this->fileOpenFlag = true;
+			return;
 		}
+
+		this->fileOpenFlag = true;
+		
 }
 
 
@@ -83,17 +107,10 @@ void SourceCodeViewer::saveFile()
 	OSPlatformUI::save_file(this->openFilePath, this->pathSize);
 	printf("\n Save File Path: ");
 
-	std::string openFileResult;
-	for (int i = 0; i < this->pathSize; ++i)
-	{
-		printf("%c", this->openFilePath[i]);
-		openFileResult.push_back(this->openFilePath[i]);
-	}
-
 	ofstream output;
 	char currentChar;
 	output.open(this->openFilePath);
-	if (openFileResult != "") //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
+	if (this->openFilePath[0] != NULL) //This fixes the issue of when the user decides to cancel the dialog, which causes a system crash.
 	{
 		for (int i = 0; i < this->fileContentsVector.size(); ++i)
 		{
@@ -203,8 +220,10 @@ void SourceCodeViewer::drawCodeViewerWindow()
 					}
 
 
-					string label = "##";
+					string label = "##String";
 					label.push_back(i);
+					label += "Window";
+					label.push_back(this->windowNum);
 					
 					string checkboxLabel = "##Checkbox";
 					checkboxLabel.push_back(i);
