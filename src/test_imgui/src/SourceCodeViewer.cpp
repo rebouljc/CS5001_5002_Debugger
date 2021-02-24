@@ -13,7 +13,8 @@ SourceCodeViewer::SourceCodeViewer()
 	//We have to go through all of this, allocating the string on the heap and initializing all of its values to NULL
 	//so we don't get junk at the end of the file path.
 	this->windowNum = 0;
-	this->scvLabel = "Source Code Viewer##" + windowNum;
+	this->scvLabel = "Source Code Viewer##";
+	this->scvLabel.push_back(windowNum);
 	this->openFilePath = new char[sizeof(char) * (DEBUGGER_MAX_PATH*2)];
 	for (int i = 0; i < DEBUGGER_MAX_PATH; ++i)
 	{
@@ -129,7 +130,8 @@ SourceCodeViewer::SourceCodeViewer(int currentWindowNum)
 	//We have to go through all of this, allocating the string on the heap and initializing all of its values to NULL
 	//so we don't get junk at the end of the file path.
 	this->windowNum = ++currentWindowNum;
-	this->scvLabel = "Source Code Viewer##" + windowNum;
+	this->scvLabel = "Source Code Viewer##";
+	this->scvLabel.push_back(windowNum);
 	
 	this->openFilePath = new char[sizeof(char) * (DEBUGGER_MAX_PATH * 2)];
 	for (int i = 0; i < DEBUGGER_MAX_PATH; ++i)
@@ -267,7 +269,7 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				else if (ImGui::MenuItem("Open File in New Window"))
 				{
 					this->vars->srcCodeViewWindow.push_back(new SourceCodeViewer(this->windowNum));
-					vars->srcCodeViewWindow.at(0)->setPersistantVars(vars);
+					vars->srcCodeViewWindow.at(this->vars->srcCodeViewWindow.size() -1)->setPersistantVars(vars);
 				}
 				else if (ImGui::MenuItem("Save"))
 				{
