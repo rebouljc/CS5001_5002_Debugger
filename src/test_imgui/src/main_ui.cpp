@@ -17,6 +17,7 @@ void init_vars(Persistant_Vars* vars) {
 
 	//Create SourceCodeViewerWindow Object.  Will do looping in main_ui_loop
 	vars->srcCodeViewWindow.push_back(new SourceCodeViewer());
+	vars->srcCodeViewWindow.at(0)->setPersistantVars(vars);
 	
 }
 

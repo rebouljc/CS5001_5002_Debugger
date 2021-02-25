@@ -190,6 +190,7 @@ void SourceCodeViewer::drawCodeViewerWindow()
 	windowFlags |= ImGuiWindowFlags_MenuBar;
 	windowFlags |= ImGuiWindowFlags_AlwaysHorizontalScrollbar;
 	windowFlags |= ImGuiWindowFlags_AlwaysVerticalScrollbar;
+	windowFlags |= ImGuiWindowFlags_NoCollapse;
 	
 
 	if (ImGui::Begin(this->scvLabel.c_str(), 0, windowFlags))
@@ -279,6 +280,23 @@ void SourceCodeViewer::drawCodeViewerWindow()
 				{
 					this->reinit();
 					this->fileOpenFlag = false;
+				}
+
+				else if (this->windowNum > 0 && ImGui::MenuItem("Close Window"))
+				{
+					
+					vector<SourceCodeViewer*>::iterator it = this->vars->srcCodeViewWindow.begin();
+					for (int i = 0; i < this->vars->srcCodeViewWindow.size(); ++i)
+					{
+						if (i == this->windowNum)
+						{
+							
+							this->vars->srcCodeViewWindow.erase(it);
+							break;
+						}
+							++it;
+						
+					}
 				}
 
 				
