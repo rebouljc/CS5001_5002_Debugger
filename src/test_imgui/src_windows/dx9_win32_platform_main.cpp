@@ -673,7 +673,7 @@ void parse_pdb_file_2(char* pdb_file_path) {
 
     // Read in the PDBInfo stream from index 1
     bytes_copied = 0;
-    pdb_info_buffer = (char*)OSLayer::allocate_memory(stream_block_info[1].num_bytes);
+    pdb_info_buffer = (char*)OSLayer::allocate_memory(stream_block_info[1].num_blocks*pdb_header.page_size);
     for (int i = 0; i < stream_block_info[1].num_blocks; i++) {
         block = *(unsigned int*)(buffer+stream_block_info[1].byte_offset_to_blocks + (i*4));
 		SetFilePointer(file_handle, block*pdb_header.page_size, NULL, FILE_BEGIN);
@@ -739,7 +739,7 @@ void parse_pdb_file_2(char* pdb_file_path) {
 
 		// Read in the PDBInfo stream from index 1
 		bytes_copied = 0;
-		names_buffer = (char*)OSLayer::allocate_memory(stream_block_info[names_stream_index].num_bytes);
+		names_buffer = (char*)OSLayer::allocate_memory(stream_block_info[names_stream_index].num_blocks*pdb_header.page_size);
 		for (int i = 0; i < stream_block_info[names_stream_index].num_blocks; i++) {
 			block = *(unsigned int*)(buffer+stream_block_info[names_stream_index].byte_offset_to_blocks + (i*4));
 			SetFilePointer(file_handle, block*pdb_header.page_size, NULL, FILE_BEGIN);
