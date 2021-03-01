@@ -630,6 +630,9 @@ void parse_pdb_file_2(char* pdb_file_path) {
     char* stream_buffer = NULL; 
 
     unsigned int bytes_copied = 0;
+    char* names_buffer = NULL; 
+    unsigned int names_stream_index = 0;
+    char* pdb_info_buffer = NULL;
 
     for (int i = 0; i < num_streams; i++) {
         current_stream_size = *(unsigned int*)(buffer + ((i + 1) * 4));
@@ -668,6 +671,84 @@ void parse_pdb_file_2(char* pdb_file_path) {
         total_blocks += stream_block_size;
     }
 
+    // Read in the PDBInfo stream from index 1
+    bytes_copied = 0;
+    pdb_info_buffer = (char*)OSLayer::allocate_memory(stream_block_info[1].num_bytes);
+    for (int i = 0; i < stream_block_info[1].num_blocks; i++) {
+        block = *(unsigned int*)(buffer+stream_block_info[1].byte_offset_to_blocks + (i*4));
+		SetFilePointer(file_handle, block*pdb_header.page_size, NULL, FILE_BEGIN);
+		success = ReadFile(file_handle, (char*)pdb_info_buffer+bytes_copied, pdb_header.page_size, &bytes_read, NULL);
+        bytes_copied += bytes_read;
+    }
+
+    // Read the Named Stream Map to find which stream /names is stored in
+    PDBStream s = *(PDBStream*)(pdb_info_buffer);
+
+    unsigned long nsm_offset = sizeof(PDBStream);
+    printf("\tReading the Named Stream Map\n");
+    unsigned int named_stream_map_size = *(unsigned int*)(pdb_info_buffer + nsm_offset);
+    unsigned long count = 0;
+    // Count the number of entries in the has table
+    for (int i = nsm_offset + 4; i <= nsm_offset + 4 + named_stream_map_size; i++) {
+        if (pdb_info_buffer[i] == 0) {
+            count++;
+        }
+    }
+
+    unsigned int table_offset = nsm_offset + 4 + named_stream_map_size;
+
+    unsigned int table_size = *(unsigned int*)(pdb_info_buffer + table_offset);
+    unsigned int table_capacity = *(unsigned int*)(pdb_info_buffer + table_offset + 4);
+    unsigned long long present_bit_vector = *(unsigned long long*)(pdb_info_buffer + table_offset + 8) & 0xFFFFFFFFFFFF;
+    unsigned long long deleted_bit_vector = *(unsigned long long*)(pdb_info_buffer + table_offset + 14) & 0xFFFFFFFFFFFF;
+
+    unsigned int table_items_offset = table_offset + 20;
+
+    printf("\tsize: %i\n", table_size);
+    printf("\tcapacity: %i\n", table_capacity);
+    // TODO: I'm not sure how to actually read in the present and deleted bit vectors
+    // they should tell us which indexes in the hash table can be read. But instead we're just going
+    // to assume that they are in sequential order (which will probably bite us back later
+    printf("\tpresent: %I64u\n", present_bit_vector);
+    printf("\tdeleted: %I64u\n", deleted_bit_vector);
+
+    printf("\tvalues:\n");
+    for (int i = 0; i < table_size; i++) {
+        unsigned int key = *(unsigned int*)(pdb_info_buffer + table_items_offset + i * 8);
+        unsigned int value = *(unsigned int*)(pdb_info_buffer + table_items_offset + i * 8 + 4);
+        if (key < BUFFER_SIZE) {
+            printf("\t\tkey: %i\tvalue: %i\tstring:%s\n", key, value, pdb_info_buffer + nsm_offset + 4 + key);
+            bool is_names = true;
+            for (int i = 0; i < 6; i++) {
+                if (pdb_info_buffer[nsm_offset + 4 + key + i] != "/names"[i]) {
+                    is_names = false;
+                    break;
+                }
+            }
+            if (is_names) {
+                names_stream_index = value;
+            }
+        }
+        else {
+            printf("\t\tkey: %i\tvalue: %i\n", key, value);
+        }
+    }
+
+    // Read in the /names string table
+    if (names_stream_index != 0) {
+
+		// Read in the PDBInfo stream from index 1
+		bytes_copied = 0;
+		names_buffer = (char*)OSLayer::allocate_memory(stream_block_info[names_stream_index].num_bytes);
+		for (int i = 0; i < stream_block_info[names_stream_index].num_blocks; i++) {
+			block = *(unsigned int*)(buffer+stream_block_info[names_stream_index].byte_offset_to_blocks + (i*4));
+			SetFilePointer(file_handle, block*pdb_header.page_size, NULL, FILE_BEGIN);
+			success = ReadFile(file_handle, (char*)names_buffer+bytes_copied, pdb_header.page_size, &bytes_read, NULL);
+			bytes_copied += bytes_read;
+		}
+    }
+
+
 
     // Parse the DBI Stream block;
     DbiStreamHeader dbi_stream_header = *(DbiStreamHeader*)(stream_buffer);
@@ -686,6 +767,35 @@ void parse_pdb_file_2(char* pdb_file_path) {
     printf("Parsing ModInfo\n");
     char* module_buffer = (char*)OSLayer::allocate_memory(20000);
     unsigned long max_size = 20000;
+
+    unsigned int file_info_offset = dbi_stream_header.mod_info_size 
+        + dbi_stream_header.section_contribution_size 
+        + dbi_stream_header.section_map_size
+        + sizeof(dbi_stream_header);
+    unsigned short num_modules = *(unsigned short*)(stream_buffer + file_info_offset);
+    unsigned int file_names_offset = file_info_offset + 4 + 2*(num_modules*2);
+    unsigned int num_source_files_2 = 0;
+    unsigned int source_count_offset = file_info_offset + 4 + (num_modules*2);
+    //unsigned int file_names_offset = file_info_offset + 4 + 2*(num_modules*2);
+    //unsigned int names_buffer_offset = file_names_offset+num_source_files*4;
+    for (int i = 0; i < num_modules; i++) {
+        num_source_files_2 += *(unsigned short*)(stream_buffer + source_count_offset + (i * 2));
+    }
+    unsigned int names_buffer_offset = file_names_offset+num_source_files_2*4;
+    unsigned int name_count = 0;
+    int j = 0;
+    while (stream_buffer[names_buffer_offset + j] != 0) {
+        printf("%i: %i: \t %s\n", name_count, j, stream_buffer + names_buffer_offset+j);
+        while (stream_buffer[names_buffer_offset + j] != '\0') {
+            j++;
+        }
+        j++;
+        name_count++;
+    }
+
+
+
+
     while (mod_info_offset < sizeof(DbiStreamHeader) + dbi_stream_header.mod_info_size) {
 		ModInfo mod_info = *(ModInfo*)(stream_buffer+mod_info_offset);
         if (mod_info.module_sym_stream != 0xFFFF) {
@@ -732,9 +842,11 @@ void parse_pdb_file_2(char* pdb_file_path) {
                     }
 					unsigned int range = *(unsigned int*)(module_buffer + line_information_offset + 16);
 					unsigned int offset_file = *(unsigned int*)(module_buffer + line_information_offset + 20);
-                    name_offset = checksum_offset + offset_file + 8;
+                    name_offset = *(unsigned int*)(module_buffer + checksum_offset + offset_file + 8);
 					unsigned int num_pairs = *(unsigned int*)(module_buffer + line_information_offset + 24);
 					unsigned int bytes_of_code = *(unsigned int*)(module_buffer + line_information_offset + 28);
+                    //printf("Offset into names buffer: %i, module name: %s\n", name_offset, stream_buffer+mod_info_offset+sizeof(ModInfo));
+                    printf("File name: %s\n", names_buffer + name_offset + 12);
                     for (int i = 0; i < num_pairs; i++) {
                         CVLine line_info = *(CVLine*)(module_buffer + line_information_offset + 32 + 8 * i);
 						//printf("%i, %#08x\n", line_info.linenum_start, base_address+line_info.offset);
@@ -777,11 +889,13 @@ void parse_pdb_file_2(char* pdb_file_path) {
 
     printf("\n");
     printf("Parse File Info Substream:\n");
+    /*
     unsigned int file_info_offset = dbi_stream_header.mod_info_size 
         + dbi_stream_header.section_contribution_size 
         + dbi_stream_header.section_map_size
         + sizeof(dbi_stream_header);
     unsigned short num_modules = *(unsigned short*)(stream_buffer + file_info_offset);
+    */
     printf("Number of modules: %i\n", num_modules);
     printf("Number of source files: %i\n", num_source_files);
     printf("Module Indicies = {");
@@ -789,10 +903,11 @@ void parse_pdb_file_2(char* pdb_file_path) {
         printf("%i, ", *(unsigned short*)(stream_buffer + file_info_offset + 4 + (i * 2)));
     }
 	printf("}\n");
-    unsigned int num_source_files_2 = 0;
-    unsigned int source_count_offset = file_info_offset + 4 + (num_modules*2);
-    unsigned int file_names_offset = file_info_offset + 4 + 2*(num_modules*2);
-    unsigned int names_buffer_offset = file_names_offset+num_source_files*4;
+    //unsigned int num_source_files_2 = 0;
+    num_source_files_2 = 0;
+    //unsigned int source_count_offset = file_info_offset + 4 + (num_modules*2);
+    //unsigned int file_names_offset = file_info_offset + 4 + 2*(num_modules*2);
+    //unsigned int names_buffer_offset = file_names_offset+num_source_files*4;
     for (int i = 0; i < num_modules; i++) {
         unsigned short this_mod_src_count = *(unsigned short*)(stream_buffer + source_count_offset + (i * 2));
         num_source_files_2 += this_mod_src_count;
