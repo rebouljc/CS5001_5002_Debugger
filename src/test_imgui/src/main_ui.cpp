@@ -1,6 +1,9 @@
 #include "main_ui.h"
 #include <OSPlatformUI.h>
 
+char buffer1[] = { 'a','l','e','t','t','e','r','h','e','r','e' };
+char* buffer = buffer1;
+int length = 11;
 
 void demo_code(Persistant_Vars *vars);
 
@@ -80,6 +83,15 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
     ImGui::End();
 }
 
+void draw_memory_window(char* buffer, unsigned int length) {
+	ImGui::Begin("Memory Viewer");
+	for (int i = 0; i < length; i++) {
+		ImGui::Text(buffer + i);
+	}
+	ImGui::End();
+}
+
+
 void draw_start_window(Persistant_Vars* vars) {
 	ImGui::Begin("Start Window");
 
@@ -123,6 +135,7 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_start_window(vars);
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
+	draw_memory_window(buffer, length);
     demo_code(vars);
 	//Now, we can have multiple SourceCodeViewer windows open at the same time.  We just declare an object for each.
 	//We can have an option to open File in new Window.
