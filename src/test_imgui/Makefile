@@ -23,6 +23,7 @@ EXE = $(BUILD_DIR)/linux_test_imgui
 
 SOURCES = $(SRC_DIR)/main_ui.cpp
 SOURCES += $(LINUX_DIR)/sdl_opengl3_platform_main.cpp $(LINUX_DIR)/linux_platform_debugger.cpp
+SOURCES += $(SRC_DIR)/SourceCodeViewer.cpp
 
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp

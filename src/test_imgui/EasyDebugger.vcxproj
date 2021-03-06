@@ -101,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXSDK_DIR)Include;src_windows;imgui\backends;imgui;src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXSDK_DIR)Include;src_windows;imgui\backends;imgui;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +152,9 @@
     <ClInclude Include="imgui\imgui_internal.h" />
     <ClInclude Include="src\debugger.h" />
     <ClInclude Include="src\main_ui.h" />
-    <ClInclude Include="src\os_layer.h" />
+    <ClInclude Include="src\OSPlatformUI.h" />
+    <ClInclude Include="src\SourceCodeViewer.h" />
+    <ClInclude Include="src_windows\OSPlatformUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\backends\imgui_impl_dx9.cpp" />
@@ -162,8 +164,9 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\main_ui.cpp" />
+    <ClCompile Include="src\SourceCodeViewer.cpp" />
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp" />
-    <ClCompile Include="src_windows\windows_layer.cpp" />
+    <ClCompile Include="src_windows\OSPlatformUI.cpp" />
     <ClCompile Include="src_windows\windows_platform_debugger.cpp" />
   </ItemGroup>
   <ItemGroup>

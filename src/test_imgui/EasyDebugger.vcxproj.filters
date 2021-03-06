@@ -31,15 +31,16 @@
     <ClInclude Include="imgui\backends\imgui_impl_win32.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\os_layer.h">
+    <ClInclude Include="src\SourceCodeViewer.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src_windows\OSPlatformUI.h" />
+    <ClInclude Include="src\OSPlatformUI.h">
       <Filter>sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp">
-      <Filter>src_windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src_windows\windows_platform_debugger.cpp">
       <Filter>src_windows</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
@@ -63,7 +64,13 @@
     <ClCompile Include="imgui\backends\imgui_impl_win32.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src_windows\windows_layer.cpp">
+    <ClCompile Include="src\SourceCodeViewer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src_windows\OSPlatformUI.cpp">
+      <Filter>src_windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src_windows\windows_platform_debugger.cpp">
       <Filter>src_windows</Filter>
     </ClCompile>
   </ItemGroup>

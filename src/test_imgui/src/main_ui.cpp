@@ -1,6 +1,4 @@
 #include "main_ui.h"
-#include "imgui.h"
-//#include "debugger.h"
 
 
 void demo_code(Persistant_Vars *vars);
@@ -16,6 +14,11 @@ void init_vars(Persistant_Vars* vars) {
 	memset(vars->processes, 0, sizeof(vars->processes));
 	vars->num_processes = Debugger::list_of_processes(vars->processes, DEBUGGER_MAX_PROCESSES);
 	// Should change that dependency in the future
+
+	//Create SourceCodeViewerWindow Object.  Will do looping in main_ui_loop
+	vars->srcCodeViewWindow.push_back(new SourceCodeViewer());
+	vars->srcCodeViewWindow.at(0)->setPersistantVars(vars);
+	
 }
 
 void draw_cpu_registers(int num_registers) {
@@ -30,10 +33,12 @@ void draw_cpu_registers(int num_registers) {
 }
 
 void draw_processes(Debugger::Process* processes, unsigned long &num_processes) {
-	static ImGuiTextFilter filter("-..."); // TODO: move to PersistantVars
-	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
-	ImGui::Begin("Processes");
 
+
+	static ImGuiTextFilter filter("-..."); // TODO: move to PersistantVars.
+	static int processes_displayed = 0; // TODO: not sure if we're going to keep this
+	ImGui::Begin("Processes"); 
+	
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.0f);
     ImGui::Text("Num Processes: %i", num_processes);
 	ImGui::SameLine();
@@ -109,11 +114,18 @@ void main_ui_loop(Persistant_Vars *vars) {
 	draw_cpu_registers(vars->num_registers);
 	draw_processes(vars->processes, vars->num_processes);
     demo_code(vars);
+	//Now, we can have multiple SourceCodeViewer windows open at the same time.  We just declare an object for each.
+	//We can have an option to open File in new Window.
+	for (int i = 0; i < vars->srcCodeViewWindow.size(); ++i)
+	{
+		vars->srcCodeViewWindow.at(i)->displayLoop();
+	}
+	
 	
 
 	// Should this be here or should we call this from
 	// the platform layer???
-	Debugger::debug_loop(&vars->debug_data);
+	//Debugger::debug_loop(&vars->debug_data);
 }
 
 void demo_code(Persistant_Vars *vars){

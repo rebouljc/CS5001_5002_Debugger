@@ -2,13 +2,13 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
+
 #define IMGUI_IMPL_WIN32_DISABLE_GAMEPAD
+
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 #include "imgui_impl_win32.h"
 #include <d3d9.h>
-//#define DIRECTINPUT_VERSION 0x0602 
-//#include <dinput.h>
 #include <tchar.h>
 
 #include "main_ui.h"
@@ -24,16 +24,17 @@ void CleanupDeviceD3D();
 void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+
 // Main code
 int main(int, char**)
 {
-    ImGui_ImplWin32_EnableDpiAwareness();
+   // ImGui_ImplWin32_EnableDpiAwareness();
 
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ImGui Example"), NULL };
     ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("EasyDebugger"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("Smashin' Debugger"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(hwnd))
@@ -59,8 +60,8 @@ int main(int, char**)
     //io.ConfigViewportsNoTaskBarIcon = true;
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
+    //ImGui::StyleColorsDark();
+    ImGui::StyleColorsClassic();
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
@@ -90,9 +91,10 @@ int main(int, char**)
     //IM_ASSERT(font != NULL);
 
     // Our state
-    
     Persistant_Vars vars;
     init_vars(&vars);
+    vars.srcCodeViewWindow.at(0)->setPersistantVars(&vars);
+
 
     // Main loop
     MSG msg;
@@ -146,6 +148,12 @@ int main(int, char**)
             ResetDevice();
     }
 
+    //Had to fix a little memory leak here.
+    for (int i = 0; i < vars.srcCodeViewWindow.size(); ++i)
+    {
+        delete (vars.srcCodeViewWindow.at(i));
+
+    }
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
