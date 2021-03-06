@@ -76,10 +76,6 @@ int Debugger::start_and_debug_exe(Debugger::DebuggerData* data){
 		printf("CreateProcess failed (%d).\n", GetLastError());
 		return 0;
 	}
-	else {
-		data->running = false;
-		data->debugging = false;
-	}
 
 	data->running = true;
 	data->debugging = true;

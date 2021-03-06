@@ -135,7 +135,7 @@ void main_ui_loop(Persistant_Vars *vars) {
 
 	// Should this be here or should we call this from
 	// the platform layer???
-	//Debugger::debug_loop(&vars->debug_data);
+	Debugger::debug_loop(&vars->debug_data);
 }
 
 void demo_code(Persistant_Vars *vars){
