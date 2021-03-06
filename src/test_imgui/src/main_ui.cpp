@@ -89,9 +89,8 @@ void draw_start_window(Persistant_Vars* vars) {
 	}
 	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);
-	ImGui::InputText("", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+	ImGui::InputText(" ", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
 	ImGui::PopItemWidth();
-
 
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
