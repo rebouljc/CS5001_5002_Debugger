@@ -1,4 +1,5 @@
 #include "main_ui.h"
+#include <OSPlatformUI.h>
 
 
 void demo_code(Persistant_Vars *vars);
@@ -81,7 +82,17 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 
 void draw_start_window(Persistant_Vars* vars) {
 	ImGui::Begin("Start Window");
-	ImGui::InputText("Exe Path: ", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+
+	int dummy = 0;
+	if (ImGui::Button("Select exe...")) {
+		OSPlatformUI::open_file(vars->debug_data.exe_path, dummy);
+	}
+	ImGui::SameLine();
+	ImGui::PushItemWidth(-1);
+	ImGui::InputText("", vars->debug_data.exe_path, DEBUGGER_MAX_PATH);
+	ImGui::PopItemWidth();
+
+
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
 	}
