@@ -307,8 +307,8 @@ void SourceCodeViewer::drawCodeViewerWindow()
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 
