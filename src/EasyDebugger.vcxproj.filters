@@ -37,6 +37,9 @@
     <ClInclude Include="src\OSPlatformUI.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\pdb_parser.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src_windows\dx9_win32_platform_main.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="src_windows\windows_platform_debugger.cpp">
       <Filter>src_windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pdb_parser.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

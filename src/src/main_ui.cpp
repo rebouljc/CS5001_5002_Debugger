@@ -85,7 +85,7 @@ void draw_start_window(Persistant_Vars* vars) {
 
 	int dummy = 0;
 	if (ImGui::Button("Select exe...")) {
-		OSPlatformUI::open_file(vars->debug_data.exe_path, dummy);
+		OSPlatformUI::open_file_dialog(vars->debug_data.exe_path, dummy);
 	}
 	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);

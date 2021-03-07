@@ -47,7 +47,7 @@ void SourceCodeViewer::openFile()
 	}
 
 
-	OSPlatformUI::open_file(this->openFilePath, this->pathSize);
+	OSPlatformUI::open_file_dialog(this->openFilePath, this->pathSize);
 	
 		printf("\n Open File Path: ");
 
@@ -105,7 +105,7 @@ void SourceCodeViewer::saveFile()
 {
 
 	this->reinitSaveMethod();  //We have to delete and reallocate the open file path.
-	OSPlatformUI::save_file(this->openFilePath, this->pathSize);
+	OSPlatformUI::save_file_dialog(this->openFilePath, this->pathSize);
 	printf("\n Save File Path: ");
 
 	ofstream output;

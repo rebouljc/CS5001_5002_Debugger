@@ -8,7 +8,7 @@
 #include <ShObjIdl_core.h>
 
 
-int OSPlatformUI::open_file(char* returned_file_path, int &pathSize) {
+int OSPlatformUI::open_file_dialog(char* returned_file_path, int &pathSize) {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
 	if (!SUCCEEDED(hr)) {
 		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
@@ -85,7 +85,7 @@ int OSPlatformUI::open_file(char* returned_file_path, int &pathSize) {
 	return 0;
 }
 
-int OSPlatformUI::save_file(char* returned_file_path, int& pathSize) {
+int OSPlatformUI::save_file_dialog(char* returned_file_path, int& pathSize) {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
 	if (!SUCCEEDED(hr)) {
 		CoUninitialize(); // CoUninitialize needs to be called whether or not the initize succeeded
