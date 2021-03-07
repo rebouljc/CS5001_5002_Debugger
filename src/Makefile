@@ -19,7 +19,7 @@ SRC_DIR = src
 LINUX_DIR = src_linux
 BUILD_DIR = build
 
-EXE = $(BUILD_DIR)/linux_test_imgui
+EXE = $(BUILD_DIR)/EasyDebugger
 
 SOURCES = $(SRC_DIR)/main_ui.cpp
 SOURCES += $(LINUX_DIR)/sdl_opengl3_platform_main.cpp $(LINUX_DIR)/linux_platform_debugger.cpp
