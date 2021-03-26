@@ -132,6 +132,50 @@ unsigned long Debugger::list_of_processes(Debugger::Process* out_processes, unsi
 	return (unsigned long)cProcesses;
 }
 
+bool Debugger::set_breakpoint(Debugger::DebuggerData* data, char* file, unsigned int line) {
+	// Currently assume the file is "main_ui.cpp"
+
+	// Find the line in the debug data
+	LineNumberData* line_data = (LineNumberData*)data->line_number_data;
+	if (line_data == NULL) {
+		return false;
+	}
+	for (int i = 0; i < line_data->number_of_lines; i++) {
+		LineNumber line_number = *(LineNumber*)(data->line_number_data + sizeof(LineNumberData) + i * sizeof(LineNumber));
+		if (line_number.line_number == line) {
+
+			if (!data->debugging) {
+				return false;
+			}
+
+			HANDLE target_handle = OpenProcess(PROCESS_ALL_ACCESS | PROCESS_VM_READ, FALSE, data->pid);
+			if (target_handle == NULL) {
+				return false;
+			}
+
+			/*
+			char buffer[200];
+			for (int i = 0; i < 200; i++) {
+				buffer[i] = 0;
+			}
+			unsigned long long bytes_read;
+			LPCVOID byte_offset = (LPCVOID)(line_number.offset_into_section + data->base_of_code);
+			ReadProcessMemory(target_handle, byte_offset, buffer, 1, &bytes_read);
+			unsigned int error_code = GetLastError();
+
+			ReadProcessMemory(target_handle, (LPCVOID)line_number.offset_into_section, buffer, 1, &bytes_read);
+			error_code = GetLastError();
+
+			// Set break point here
+			printf("\ndo breakpoint\n");
+			*/
+			return true;
+		}
+	}
+	//ReadProcessMemory(GetCurrentProcess(), )
+	return false;
+}
+
 // This is the windows way of checking for debug events
 // from the target process
 void EnterDebugLoop(const LPDEBUG_EVENT debug_event, Debugger::DebuggerData *data) {

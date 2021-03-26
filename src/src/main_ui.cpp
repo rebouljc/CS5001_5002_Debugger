@@ -1,5 +1,6 @@
 #include "main_ui.h"
 #include <OSPlatformUI.h>
+#include <pdb_parser.h>
 
 
 void demo_code(Persistant_Vars *vars);
@@ -82,6 +83,7 @@ void draw_processes(Debugger::Process* processes, unsigned long &num_processes) 
 
 void draw_start_window(Persistant_Vars* vars) {
 	ImGui::Begin("Start Window");
+	static char pdb_path[DEBUGGER_MAX_PATH];
 
 	int dummy = 0;
 	if (ImGui::Button("Select exe...")) {
@@ -94,10 +96,14 @@ void draw_start_window(Persistant_Vars* vars) {
 
 	if (ImGui::Button("Start Process")) {
 		Debugger::start_and_debug_exe(&vars->debug_data);
+		PDB::get_pdb_path_from_pe(vars->debug_data.exe_path, pdb_path, &vars->debug_data);
+		vars->debug_data.line_number_data = (char*)PDB::get_source_to_byte_associations(pdb_path);
+		printf("Got debug line info for main_ui.cpp\n");
 	}
 	if (vars->debug_data.running) {
 		ImGui::Text("PID: %u", vars->debug_data.pid);
 		ImGui::Text("TID: %u", vars->debug_data.tid);
+		ImGui::Text("PDB path: %s", pdb_path);
 	}
 	ImGui::Text("Debugging: ");
 	ImGui::SameLine();

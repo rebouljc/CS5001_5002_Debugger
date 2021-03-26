@@ -234,7 +234,11 @@ void SourceCodeViewer::drawCodeViewerWindow()
 					checkboxLabel.push_back(this->windowNum);
 					
 					bool isChecked = this->checkboxCheckedVector.at(i);
-					ImGui::Checkbox(checkboxLabel.c_str(), &isChecked);
+					if (ImGui::Checkbox(checkboxLabel.c_str(), &isChecked)) {
+						if (isChecked) {
+							isChecked = Debugger::set_breakpoint(&this->vars->debug_data, this->openFilePath, i+1);
+						}
+					}
 					this->checkboxCheckedVector[i] = isChecked;
 					ImGui::SameLine();
 					ImGui::InputText(label.c_str(), currentString, (size_t)(MAX_BUFFER_SIZE), ImGuiInputTextFlags_CtrlEnterForNewLine);

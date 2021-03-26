@@ -24,11 +24,25 @@ namespace Debugger {
 		bool debugging = false;
 		unsigned long pid = 0;
 		unsigned long tid = 0;
+		unsigned long long base_of_code = 0;
+		char* line_number_data = 0;  // a pointer to an array of LineNumberData's which have arbritary length
 	};
 
 	struct Process {
 		unsigned long pid;
 		char short_name[50];
+	};
+
+	struct LineNumber {
+		unsigned long offset_into_section;
+		unsigned int  line_number;
+	};
+
+	// Struct for the line number-byte association for a file
+	struct LineNumberData {
+		char file_name[DEBUGGER_MAX_PATH];
+		unsigned long number_of_lines;
+		// LineNumber lines[number_of_lines];
 	};
 
 	int debug_init(DebuggerData* data);
@@ -48,6 +62,7 @@ namespace Debugger {
 	int debug_loop(DebuggerData* data);
 	
 	int start_and_debug_exe(DebuggerData* data);
+	bool set_breakpoint(DebuggerData* data, char* file_name, unsigned int line);
 	int get_number_registers();
 	unsigned long list_of_processes(Process* out_processes, unsigned long max);
 }

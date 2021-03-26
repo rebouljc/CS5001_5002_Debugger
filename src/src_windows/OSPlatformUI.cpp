@@ -7,6 +7,16 @@
 #include <stdio.h> // temporary include
 #include <ShObjIdl_core.h>
 
+void* OSPlatformUI::allocate_memory(unsigned long size_bytes) {
+	HANDLE heap = GetProcessHeap();
+	void* memory = HeapAlloc(heap, NULL, size_bytes);
+	return memory;
+}
+
+ bool OSPlatformUI::free_memory(void* memory) {
+	HANDLE heap = GetProcessHeap();
+	return HeapFree(heap, NULL, memory);
+}
 
 int OSPlatformUI::open_file_dialog(char* returned_file_path, int &pathSize) {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED|COINIT_DISABLE_OLE1DDE);
