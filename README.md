@@ -38,9 +38,11 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * The fall powerpoint slides can be found [here](https://drive.google.com/file/d/1uEYCghGHuXhhrNPanpcJ8pSuRX5kiN23/view?usp=sharing)
 
 **Spring Final Project Expo Links**
-
 * [PowerPoint Presentation](https://docs.google.com/presentation/d/1xgrNVBd2GFu39RWKvkG8pJqLK4FWEvtmWB22TiTu9UQ/edit?usp=sharing)
 * [Final Expo Poster](https://drive.google.com/file/d/13Ngsk0Cp6klo5cAucMUNMzxjDVkiMRvX/view?usp=sharing)
+
+**User Manual and FAQs**
+[User Manual and FAQ](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/User-Docs)
 
 **Self-Assessment Essays - Fall Semester**
 * [James Reboulet](Essays/JamesRebouletEssays/Capstone%20Assessment%20-%20James%20C.%20Reboulet%20(CS).md)
