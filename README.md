@@ -42,7 +42,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * [Final Expo Poster](https://drive.google.com/file/d/13Ngsk0Cp6klo5cAucMUNMzxjDVkiMRvX/view?usp=sharing)
 
 **User Manual and FAQs**
-* [User Manual and FAQ](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/User-Docs)
+[User Manual and FAQ](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/User-Docs)
 
 **Self-Assessment Essays - Fall Semester**
 * [James Reboulet](Essays/JamesRebouletEssays/Capstone%20Assessment%20-%20James%20C.%20Reboulet%20(CS).md)
@@ -55,7 +55,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * [Deion Booher]()
 
 **Test Plan and Results**
-* [Test Plan]()
+* [Test Plan](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/Testing-Document)
 * [Results]()
 
 **Summary of Hours and Justification**
