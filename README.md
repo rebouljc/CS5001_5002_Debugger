@@ -50,7 +50,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * [Deion Booher](Essays/DeionBooherEssays/DeionBooher%20Capstone%20Assessment.md)
 
 **Final Self-Assessment Essays - Spring Semester**
-* [James Reboulet](Essays/JamesRebouletEssays/JamesCRebouletSelfEvaluation.md)
+* [James Reboulet](Essays/JamesRebouletEssays/JamesCReboulet_SelfEvaluation.md)
 * [Wayne Hafely]()
 * [Deion Booher]()
 
