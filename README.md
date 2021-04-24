@@ -58,7 +58,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 * [Test Plan and Results Document](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/Testing-Document)
 
 **Summary of Hours and Justification**
-* [James Reboulet]()
+* [James Reboulet](Essays/JamesRebouletEssays/ProjectHoursAndJustification_JamesCReboulet)
 * [Wayne Hafely]()
 * [Deion Booher]()
 
