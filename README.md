@@ -52,7 +52,7 @@ Design Diagrams and be found [in this lucidchart](https://app.lucidchart.com/doc
 **Final Self-Assessment Essays - Spring Semester**
 * [James Reboulet](Essays/JamesRebouletEssays/JamesCReboulet_SelfEvaluation.md)
 * [Wayne Hafely]()
-* [Deion Booher]()
+* [Deion Booher](Essays/DeionBooherEssays/Final%20Assessment.md)
 
 **Test Plan and Results**
 * [Test Plan and Results Document](https://github.com/rebouljc/CS5001_5002_Debugger/wiki/Testing-Document)
